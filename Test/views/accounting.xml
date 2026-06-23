@@ -5,18 +5,10 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <xpath expr="://[@name='header_left_group']" position="after">
+            <xpath expr="//th[@name='th_subtotal']" position="before">
                 <group>
                     <field name="x_custom_field"/>
                 </group>
             </xpath>
         </field>
     </record>
-
-    <template id="custom_invoice_report_inherit" inherit_id="account.report_invoice_document">
-        <xpath expr="//table[@name='invoice_line_table']" position="after">
-            <span t-if="o.x_custom_field" t-field="o.x_custom_field"/>
-        </xpath>
-    </template>
-
-</odoo>
