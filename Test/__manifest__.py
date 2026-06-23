@@ -7,6 +7,7 @@
     'depends': ['base','account'],
     'data': [
         "views/accounting.xml"
+
     ],
     'application': True,
 }
