@@ -4,11 +4,10 @@
     'author': 'Abdalrhman Salah',
     'category': '',
     'version': '19.0.1.0.0',
-    'depends': ['base','account'],
+    'depends': ['base', 'account'],
     'data': [
-    "views/accounting_view.xml",
-    "security/ir.model.access.csv",
-
+        "security/ir.model.access.csv",  # لازم الصلاحيات تقرأ الأول هنا
+        "views/accounting_view.xml",
     ],
     'application': True,
 }
