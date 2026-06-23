@@ -1,5 +1,7 @@
-from odoo import models , fields
-class Accounting(models.Model):
-    _inherit = "account.move"
-    custom_type = fields.Char(string="Name")
+from odoo import models, fields
 
+class AccountCustomType(models.Model):
+    _name = "account.custom.type"
+    _description = "Accounting Custom Types"
+
+    custom_type = fields.Char(string="Name")
