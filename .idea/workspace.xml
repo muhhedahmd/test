@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="399f3966-e0d2-4f58-bbe1-5d63ca568496" name="Changes" comment="test">
-      <change afterPath="$PROJECT_DIR$/Test/views/accounting_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/views/accounting.xml" beforeDir="false" />
-    </list>
+    <list default="true" id="399f3966-e0d2-4f58-bbe1-5d63ca568496" name="Changes" comment="test" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,7 +176,7 @@
       <workItem from="1782215461119" duration="7326000" />
       <workItem from="1782225949003" duration="21000" />
       <workItem from="1782226027972" duration="29000" />
-      <workItem from="1782226075074" duration="628000" />
+      <workItem from="1782226075074" duration="985000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
