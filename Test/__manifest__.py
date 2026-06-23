@@ -6,7 +6,7 @@
     'version': '19.0.1.0.0',
     'depends': ['base','account'],
     'data': [
-        "views/accounting.xml"
+        "views/accounting_view.xml"
 
     ],
     'application': True,
