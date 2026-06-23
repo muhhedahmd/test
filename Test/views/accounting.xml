@@ -1,14 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_move_form_inherit_test" model="ir.ui.view">
-        <field name="name">account.move.form.inherit.test</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
 
-            <xpath expr="//field[@name='invoice_line_ids']//field[@name='price_unit']" position="after">
-                <field name="x_custom_field"/>
-            </xpath>
+    <template id="invoice_report_custom_inherit"
+              inherit_id="account.report_invoice_document">
 
-        </field>
-    </record>
+        <xpath expr="//div[contains(@class,'overflow-hidden')]" position="after">
+
+            <div class="row mt-3">
+                <div class="col-12 text-end">
+                    <strong>Custom Field:</strong>
+                    <span t-field="o.x_custom_field"/>
+                </div>
+            </div>
+
+        </xpath>
+
+    </template>
+
 </odoo>
