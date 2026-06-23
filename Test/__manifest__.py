@@ -6,7 +6,7 @@
     'version': '19.0.1.0.0',
     'depends': ['base', 'account'],
     'data': [
-        "security/ir.model.access.csv",  # لازم الصلاحيات تقرأ الأول هنا
+        "security/ir.model.access.csv",
         "views/accounting_view.xml",
     ],
     'application': True,

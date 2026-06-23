@@ -4,7 +4,8 @@
         <field name="model">account.custom.type</field>
         <field name="arch" type="xml">
             <list string="Types">
-                <field name="custom_type" string="Name"/>
+                <field name="type" string="Name"/>
+                <field name="des" string="Name"/>
             </list>
         </field>
     </record>
