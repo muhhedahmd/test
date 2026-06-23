@@ -1,14 +1,32 @@
 <odoo>
-    <record id="inherit_invoice_line" model="ir.ui.view">
-        <field name="name">account.move.form.inherit.simple</field>
+
+    <record id="account_move_form_custom_field" model="ir.ui.view">
+        <field name="name">account.move.form.custom.field</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
 
-            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='price_unit']" position="after">
+            <xpath expr="//field[@name='ref']" position="after">
                 <field name="x_custom_field"/>
             </xpath>
 
         </field>
     </record>
+
+    <record id="report_invoice_custom_field" model="ir.ui.view">
+        <field name="name">account.report.invoice.custom.field</field>
+        <field name="type">qweb</field>
+        <field name="key">account.report_invoice_document_custom</field>
+        <field name="inherit_id" ref="account.report_invoice_document"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='page mb-4']" position="inside">
+                <div t-if="o.x_custom_field">
+                    <span t-field="o.x_custom_field"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
 </odoo>
