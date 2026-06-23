@@ -5,7 +5,7 @@
         <field name="arch" type="xml">
             <list string="Types">
                 <field name="type" string="Name"/>
-                <field name="des" string="Name"/>
+                <field name="des" string="des"/>
             </list>
         </field>
     </record>
@@ -17,7 +17,8 @@
             <form string="Type">
                 <sheet>
                     <group>
-                        <field name="custom_type" string="Name" placeholder="type  ..."/>
+                        <field name="type" string="Name" placeholder="type  ..."/>
+                        <field name="des" string="des" placeholder="des  ..."/>
                     </group>
                 </sheet>
             </form>
