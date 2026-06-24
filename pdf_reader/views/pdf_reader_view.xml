@@ -68,53 +68,14 @@
         </field>
     </record>
 
-    <!-- Line Search View for Grouping -->
-    <record id="view_pdf_reader_line_search" model="ir.ui.view">
-        <field name="name">pdf.reader.line.search</field>
-        <field name="model">pdf.reader.line</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="reader_id"/>
-                <filter string="Invoice" name="group_by_reader" context="{'group_by': 'reader_id'}"/>
-            </search>
-        </field>
-    </record>
-
-    <!-- Line Tree View -->
-    <record id="view_pdf_reader_line_tree" model="ir.ui.view">
-        <field name="name">pdf.reader.line.tree</field>
-        <field name="model">pdf.reader.line</field>
-        <field name="arch" type="xml">
-            <list string="Extracted Lines" create="0">
-                <field name="reader_id" invisible="1"/>
-                <field name="col1" string="Description"/>
-                <field name="product_id"/>
-                <field name="col2" string="Quantity"/>
-                <field name="col3" string="Price"/>
-                <field name="col6" string="Discount"/>
-                <field name="col7" string="Tax %"/>
-                <field name="col4" string="Tax Amt"/>
-                <field name="amount_total" string="Total" sum="Total"/>
-            </list>
-        </field>
-    </record>
-
     <record id="action_pdf_reader" model="ir.actions.act_window">
         <field name="name">PDF Reader</field>
         <field name="res_model">pdf.reader</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <record id="action_pdf_reader_lines" model="ir.actions.act_window">
-        <field name="name">Extracted Lines</field>
-        <field name="res_model">pdf.reader.line</field>
-        <field name="view_mode">list,form</field>
-        <field name="context">{'search_default_group_by_reader': 1}</field>
-    </record>
-
     <!-- Menu Items -->
     <menuitem id="menu_pdf_reader_root" name="PDF Reader" sequence="10"/>
     <menuitem id="menu_pdf_reader_action" name="Upload Invoices" parent="menu_pdf_reader_root" action="action_pdf_reader" sequence="10"/>
-    <menuitem id="menu_pdf_reader_lines_action" name="Grouped Lines View" parent="menu_pdf_reader_root" action="action_pdf_reader_lines" sequence="20"/>
 
 </odoo>
