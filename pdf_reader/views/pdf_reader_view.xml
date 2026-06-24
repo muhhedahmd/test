@@ -75,9 +75,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="reader_id"/>
-                <group string="Group By">
-                    <filter string="Invoice" name="group_by_reader" context="{'group_by': 'reader_id'}"/>
-                </group>
+                <filter string="Invoice" name="group_by_reader" context="{'group_by': 'reader_id'}"/>
             </search>
         </field>
     </record>
