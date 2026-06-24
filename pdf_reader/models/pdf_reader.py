@@ -1,6 +1,7 @@
 import base64
 import json
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 from google import genai
 from google.genai import types
 
@@ -28,7 +29,7 @@ class PdfReader(models.Model):
         ('invoice', 'Vendor Bill / Invoice'),
     ], string='Document Type', default='invoice', required=True)
     
-    attachment_ids = fields.Many2many('ir.attachment', string='Upload Files (PDFs/Images)', required=True)
+    attachment_ids = fields.Many2many('ir.attachment', string='Upload Files (PDFs/Images)')
     
     prompt = fields.Text(string='Prompt', default='Extract the invoice data.')
     
@@ -51,7 +52,7 @@ class PdfReader(models.Model):
     def action_read_pdf(self):
         for record in self:
             if not record.attachment_ids:
-                continue
+                raise UserError("Please upload at least one file before extracting data!")
 
             record.line_ids.unlink()
 

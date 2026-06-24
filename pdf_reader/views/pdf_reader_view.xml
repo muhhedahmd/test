@@ -72,6 +72,7 @@
         <field name="name">PDF Reader</field>
         <field name="res_model">pdf.reader</field>
         <field name="view_mode">list,form</field>
+        <field name="target">current</field>
     </record>
 
     <!-- Menu Items -->
