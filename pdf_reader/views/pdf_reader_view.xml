@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="PDF Reader Wizard">
                 <sheet>
-                    <div class="alert alert-warning text-center" role="alert" attrs="{'invisible': [('warning_message', '=', False)]}">
+                    <div class="alert alert-warning text-center" role="alert" invisible="not warning_message">
                         <field name="warning_message" nolabel="1"/>
                     </div>
                     <group>
@@ -47,7 +47,7 @@
                 </sheet>
                 <footer>
                     <button name="action_read_pdf" string="Extract Data (Preview)" type="object" class="btn-primary"/>
-                    <button name="action_create_invoice" string="Accept &amp; Create Invoice" type="object" class="btn-success" attrs="{'invisible': [('document_type', '!=', 'invoice')]}"/>
+                    <button name="action_create_invoice" string="Accept &amp; Create Invoice" type="object" class="btn-success" invisible="document_type != 'invoice'"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
