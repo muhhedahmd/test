@@ -74,8 +74,9 @@
         <field name="model">pdf.reader.line</field>
         <field name="arch" type="xml">
             <search>
-                <group expand="1" string="Group By">
-                    <filter string="Invoice" name="group_by_reader" context="{'group_by':'reader_id'}"/>
+                <field name="reader_id"/>
+                <group string="Group By">
+                    <filter string="Invoice" name="group_by_reader" context="{'group_by': 'reader_id'}"/>
                 </group>
             </search>
         </field>
