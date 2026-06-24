@@ -5,6 +5,9 @@
     'category': '',
     'version': '19.0.1.0.0',
     'depends': ['base', 'account'],
+    'external_dependencies': {
+        'python': ['google-genai', 'PyPDF2'],
+    },
     'data': [
         'security/ir.model.access.csv',
         'views/pdf_reader_view.xml',

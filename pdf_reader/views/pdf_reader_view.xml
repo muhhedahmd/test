@@ -5,12 +5,11 @@
         <field name="name">pdf.reader.form</field>
         <field name="model">pdf.reader</field>
         <field name="arch" type="xml">
-            <form string="PDF Reader">
-                <header>
-                    <button name="action_read_pdf" string="1. Extract Data (Preview)" type="object" class="oe_highlight"/>
-                    <button name="action_create_invoice" string="2. Create Draft Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('document_type', '!=', 'invoice')]}"/>
-                </header>
+            <form string="PDF Reader Wizard">
                 <sheet>
+                    <div class="alert alert-warning text-center" role="alert" attrs="{'invisible': [('warning_message', '=', False)]}">
+                        <field name="warning_message" nolabel="1"/>
+                    </div>
                     <group>
                         <group>
                             <field name="name"/>
@@ -20,6 +19,7 @@
                         </group>
                         <group string="Extracted Preview">
                             <field name="partner_name"/>
+                            <field name="partner_id"/>
                             <field name="invoice_date"/>
                             <field name="invoice_ref"/>
                         </group>
@@ -32,6 +32,7 @@
                             <field name="line_ids">
                                 <list editable="bottom">
                                     <field name="col1" string="Description"/>
+                                    <field name="product_id"/>
                                     <field name="col2" string="Quantity"/>
                                     <field name="col3" string="Price"/>
                                     <field name="col4" string="Taxes"/>
@@ -44,6 +45,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <footer>
+                    <button name="action_read_pdf" string="Extract Data (Preview)" type="object" class="btn-primary"/>
+                    <button name="action_create_invoice" string="Accept &amp; Create Invoice" type="object" class="btn-success" attrs="{'invisible': [('document_type', '!=', 'invoice')]}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>
@@ -63,9 +69,10 @@
 
     <!-- Action -->
     <record id="action_pdf_reader" model="ir.actions.act_window">
-        <field name="name">PDF Readers</field>
+        <field name="name">PDF Reader Wizard</field>
         <field name="res_model">pdf.reader</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
     </record>
 
     <!-- Menu Items -->

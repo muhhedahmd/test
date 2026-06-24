@@ -5,20 +5,21 @@ import PyPDF2
 from odoo import models, fields, api
 from google import genai
 
-class PdfReaderLine(models.Model):
+class PdfReaderLine(models.TransientModel):
     _name = 'pdf.reader.line'
-    _description = 'PDF Reader Line'
+    _description = 'PDF Reader Line Wizard'
 
     reader_id = fields.Many2one('pdf.reader', string='Reader', ondelete='cascade')
+    product_id = fields.Many2one('product.product', string='Matched Product')
     col1 = fields.Char(string='Description / Product')
     col2 = fields.Char(string='Quantity')
     col3 = fields.Char(string='Price')
     col4 = fields.Char(string='Taxes')
     col5 = fields.Char(string='Total')
 
-class PdfReader(models.Model):
+class PdfReader(models.TransientModel):
     _name = 'pdf.reader'
-    _description = 'PDF Reader using Gemini'
+    _description = 'PDF Reader Wizard using Gemini'
 
     name = fields.Char(string='Name', required=True)
     document_type = fields.Selection([
@@ -30,8 +31,10 @@ class PdfReader(models.Model):
     
     # Preview Fields
     partner_name = fields.Char(string='Extracted Partner Name')
+    partner_id = fields.Many2one('res.partner', string='Matched Partner')
     invoice_date = fields.Date(string='Extracted Date')
     invoice_ref = fields.Char(string='Extracted Reference')
+    warning_message = fields.Char(string='Warning Message', readonly=True)
     
     result = fields.Text(string='Raw AI Result', readonly=True)
     line_ids = fields.One2many('pdf.reader.line', 'reader_id', string='Extracted Lines')
@@ -107,12 +110,29 @@ class PdfReader(models.Model):
                             except:
                                 pass # ignore bad dates
                         
+                        # Find Partner
+                        partner = False
+                        if record.partner_name:
+                            partner = self.env['res.partner'].search([('name', 'ilike', record.partner_name)], limit=1)
+                        record.partner_id = partner.id if partner else False
+
+                        if record.partner_name and not partner:
+                            record.warning_message = f"Warning: Vendor '{record.partner_name}' was not found. Please select manually."
+                        else:
+                            record.warning_message = False
+
                         # Update Lines
                         lines_data = data.get('lines', [])
                         lines_to_create = []
                         for row in lines_data:
+                            desc = str(row.get('description', ''))
+                            product = False
+                            if desc:
+                                product = self.env['product.product'].search([('name', 'ilike', desc)], limit=1)
+                                
                             lines_to_create.append((0, 0, {
-                                'col1': str(row.get('description', '')),
+                                'col1': desc,
+                                'product_id': product.id if product else False,
                                 'col2': str(row.get('quantity', '')),
                                 'col3': str(row.get('price', '')),
                                 'col4': str(row.get('taxes', '')),
@@ -126,17 +146,18 @@ class PdfReader(models.Model):
             except Exception as e:
                 record.result = f"Error calling Gemini API: {e}"
 
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'pdf.reader',
+                'view_mode': 'form',
+                'res_id': record.id,
+                'target': 'new',
+            }
+
     def action_create_invoice(self):
         for record in self:
             if record.document_type != 'invoice':
                 continue
-                
-            # Search for partner but DO NOT create one
-            partner_id = False
-            if record.partner_name:
-                partner = self.env['res.partner'].search([('name', 'ilike', record.partner_name)], limit=1)
-                if partner:
-                    partner_id = partner.id
 
             # Prepare invoice lines
             invoice_line_vals = []
@@ -152,11 +173,15 @@ class PdfReader(models.Model):
                 except ValueError:
                     pass
                     
-                invoice_line_vals.append((0, 0, {
+                line_val = {
                     'name': line.col1 or 'Extracted Item',
                     'quantity': qty,
                     'price_unit': price,
-                }))
+                }
+                if line.product_id:
+                    line_val['product_id'] = line.product_id.id
+                    
+                invoice_line_vals.append((0, 0, line_val))
 
             move_vals = {
                 'move_type': 'in_invoice', # Vendor Bill
@@ -164,8 +189,8 @@ class PdfReader(models.Model):
                 'invoice_date': record.invoice_date,
                 'invoice_line_ids': invoice_line_vals,
             }
-            if partner_id:
-                move_vals['partner_id'] = partner_id
+            if record.partner_id:
+                move_vals['partner_id'] = record.partner_id.id
                 
             move = self.env['account.move'].create(move_vals)
             
