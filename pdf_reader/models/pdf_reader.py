@@ -83,7 +83,7 @@ class PdfReader(models.TransientModel):
                 full_prompt = f"{system_instruction}\n\nUser Prompt: {record.prompt}\n\nDocument content:\n{extracted_text}"
 
                 interaction = client.interactions.create(
-                    model="gemini-3.1",
+                    model="gemini-3.5-flash",
                     input=full_prompt
                 )
                 
