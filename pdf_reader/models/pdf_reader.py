@@ -1,9 +1,8 @@
 import base64
-import io
 import json
-import PyPDF2
 from odoo import models, fields, api
 from google import genai
+from google.genai import types
 
 class PdfReaderLine(models.TransientModel):
     _name = 'pdf.reader.line'
@@ -21,12 +20,12 @@ class PdfReader(models.TransientModel):
     _name = 'pdf.reader'
     _description = 'PDF Reader Wizard using Gemini'
 
-    name = fields.Char(string='Name', required=True)
     document_type = fields.Selection([
         ('invoice', 'Vendor Bill / Invoice'),
     ], string='Document Type', default='invoice', required=True)
-    pdf_file = fields.Binary(string='PDF File', required=True)
-    pdf_filename = fields.Char(string='Filename')
+    
+    attachment_ids = fields.Many2many('ir.attachment', string='Upload Files (PDFs/Images)', required=True)
+    
     prompt = fields.Text(string='Prompt', default='Extract the invoice data.')
     
     # Preview Fields
@@ -41,35 +40,35 @@ class PdfReader(models.TransientModel):
 
     def action_read_pdf(self):
         for record in self:
-            if not record.pdf_file:
+            if not record.attachment_ids:
                 continue
 
             record.line_ids.unlink()
 
-            # 1. Extract Text from PDF
-            try:
-                pdf_data = base64.b64decode(record.pdf_file)
-                pdf_file_obj = io.BytesIO(pdf_data)
-                pdf_reader = PyPDF2.PdfReader(pdf_file_obj)
-                
-                extracted_text = ""
-                for page in pdf_reader.pages:
-                    extracted_text += page.extract_text() + "\n"
-            except Exception as e:
-                record.result = f"Error reading PDF: {e}"
-                continue
+            # Prepare files for Gemini Native Vision
+            contents = []
+            for attachment in record.attachment_ids:
+                if not attachment.datas:
+                    continue
+                # Guess mimetype if missing
+                mime = attachment.mimetype or 'application/pdf'
+                file_bytes = base64.b64decode(attachment.datas)
+                contents.append(
+                    types.Part.from_bytes(data=file_bytes, mime_type=mime)
+                )
 
-            # 2. Send to Gemini API
+            # Send to Gemini API
             try:
                 client = genai.Client(api_key="AQ.Ab8RN6LvI0jCjYexjREyBEJpNQp4mzKoIoH7S9kKS3beP5eXRA")
 
                 if record.document_type == 'invoice':
                     system_instruction = (
-                        "You are an expert AI extraction tool. Extract the invoice details from the document text. "
+                        "You are an expert AI extraction tool. Extract the invoice details from the attached documents. "
+                        "Note: The text might be Arabic extracted backwards. Please read the numbers and text carefully. "
                         "You MUST reply strictly with a valid JSON object. Do NOT include markdown like ```json. "
                         "The JSON object must have this exact structure: "
                         "{ "
-                        "  \"partner_name\": \"Name of the vendor/supplier\", "
+                        "  \"partner_name\": \"Name of the vendor/supplier (reverse the Arabic text to be readable if it is backwards)\", "
                         "  \"invoice_date\": \"YYYY-MM-DD format if found, else empty\", "
                         "  \"invoice_ref\": \"Invoice number or reference\", "
                         "  \"lines\": [ "
@@ -80,14 +79,17 @@ class PdfReader(models.TransientModel):
                 else:
                     system_instruction = "Extract data to JSON."
 
-                full_prompt = f"{system_instruction}\n\nUser Prompt: {record.prompt}\n\nDocument content:\n{extracted_text}"
+                full_prompt = f"{system_instruction}\n\nUser Prompt: {record.prompt}\n\nPlease extract data from the provided files."
+                contents.append(full_prompt)
 
-                interaction = client.interactions.create(
+                response = client.models.generate_content(
                     model="gemini-3.5-flash",
-                    input=full_prompt
+                    contents=contents
                 )
                 
-                response_text = interaction.output_text.strip()
+                # Depending on the SDK version, it could be .text or .candidates[0].content.parts[0].text
+                # .text is standard for google-genai
+                response_text = response.text.strip()
                 record.result = response_text
 
                 clean_json = response_text

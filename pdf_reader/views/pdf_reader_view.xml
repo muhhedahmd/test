@@ -12,10 +12,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="name"/>
                             <field name="document_type"/>
-                            <field name="pdf_file" filename="pdf_filename"/>
-                            <field name="pdf_filename" invisible="1"/>
+                            <field name="attachment_ids" widget="many2many_binary" string="Upload Files"/>
                         </group>
                         <group string="Extracted Preview">
                             <field name="partner_name"/>
@@ -60,9 +58,7 @@
         <field name="model">pdf.reader</field>
         <field name="arch" type="xml">
             <list string="PDF Readers">
-                <field name="name"/>
                 <field name="document_type"/>
-                <field name="pdf_filename"/>
             </list>
         </field>
     </record>
