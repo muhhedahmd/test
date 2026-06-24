@@ -8,6 +8,7 @@
     'data': [
         "security/ir.model.access.csv",
         "views/accounting_view.xml",
+        "views/move_view.xml"
     ],
     'application': True,
 }
