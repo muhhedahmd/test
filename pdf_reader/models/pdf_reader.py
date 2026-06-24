@@ -4,7 +4,7 @@ from odoo import models, fields, api
 from google import genai
 from google.genai import types
 
-class PdfReaderLine(models.TransientModel):
+class PdfReaderLine(models.Model):
     _name = 'pdf.reader.line'
     _description = 'PDF Reader Line Wizard'
 
@@ -13,12 +13,15 @@ class PdfReaderLine(models.TransientModel):
     col1 = fields.Char(string='Description / Product')
     col2 = fields.Char(string='Quantity')
     col3 = fields.Char(string='Price')
-    col4 = fields.Char(string='Taxes')
+    col4 = fields.Char(string='Taxes Amount')
     col5 = fields.Char(string='Total')
+    col6 = fields.Char(string='Discount')
+    col7 = fields.Char(string='Tax Rate (%)')
 
-class PdfReader(models.TransientModel):
+class PdfReader(models.Model):
     _name = 'pdf.reader'
-    _description = 'PDF Reader Wizard using Gemini'
+    _description = 'PDF Reader using Gemini'
+    _rec_name = 'invoice_ref'
 
     document_type = fields.Selection([
         ('invoice', 'Vendor Bill / Invoice'),
@@ -72,7 +75,7 @@ class PdfReader(models.TransientModel):
                         "  \"invoice_date\": \"YYYY-MM-DD format if found, else empty\", "
                         "  \"invoice_ref\": \"Invoice number or reference\", "
                         "  \"lines\": [ "
-                        "    { \"description\": \"Product or service name\", \"quantity\": \"Numeric quantity\", \"price\": \"Unit price\", \"taxes\": \"Tax rate or amount\", \"total\": \"Line total\" } "
+                        "    { \"description\": \"Product or service name\", \"quantity\": \"Numeric quantity\", \"price\": \"Unit price\", \"discount\": \"Discount percentage or amount\", \"tax_rate\": \"Tax percentage (e.g. 15)\", \"taxes\": \"Tax amount\", \"total\": \"Line total\" } "
                         "  ] "
                         "}"
                     )
@@ -139,6 +142,8 @@ class PdfReader(models.TransientModel):
                                 'col3': str(row.get('price', '')),
                                 'col4': str(row.get('taxes', '')),
                                 'col5': str(row.get('total', '')),
+                                'col6': str(row.get('discount', '')),
+                                'col7': str(row.get('tax_rate', '')),
                             }))
                         record.write({'line_ids': lines_to_create})
                         
@@ -147,14 +152,6 @@ class PdfReader(models.TransientModel):
 
             except Exception as e:
                 record.result = f"Error calling Gemini API: {e}"
-
-            return {
-                'type': 'ir.actions.act_window',
-                'res_model': 'pdf.reader',
-                'view_mode': 'form',
-                'res_id': record.id,
-                'target': 'new',
-            }
 
     def action_create_invoice(self):
         for record in self:
@@ -175,13 +172,45 @@ class PdfReader(models.TransientModel):
                 except ValueError:
                     pass
                     
+                
+                # Extract Discount
+                disc = 0.0
+                if line.col6:
+                    import re
+                    match = re.search(r'(\d+(?:\.\d+)?)', line.col6)
+                    if match:
+                        disc = float(match.group(1))
+
+                # Extract Tax Rate and Apply/Create
+                tax_ids = []
+                if line.col7:
+                    import re
+                    match = re.search(r'(\d+(?:\.\d+)?)', line.col7)
+                    if match:
+                        rate = float(match.group(1))
+                        if rate > 0:
+                            tax = self.env['account.tax'].search([
+                                ('amount', '=', rate), 
+                                ('type_tax_use', '=', 'purchase')
+                            ], limit=1)
+                            if not tax:
+                                tax = self.env['account.tax'].create({
+                                    'name': f'VAT {rate}% (Auto-extracted)',
+                                    'amount': rate,
+                                    'type_tax_use': 'purchase',
+                                })
+                            tax_ids.append(tax.id)
+
                 line_val = {
                     'name': line.col1 or 'Extracted Item',
                     'quantity': qty,
                     'price_unit': price,
+                    'discount': disc,
                 }
                 if line.product_id:
                     line_val['product_id'] = line.product_id.id
+                if tax_ids:
+                    line_val['tax_ids'] = [(6, 0, tax_ids)]
                     
                 invoice_line_vals.append((0, 0, line_val))
 
