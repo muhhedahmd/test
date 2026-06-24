@@ -17,6 +17,7 @@ class PdfReaderLine(models.Model):
     col5 = fields.Char(string='Total')
     col6 = fields.Char(string='Discount')
     col7 = fields.Char(string='Tax Rate (%)')
+    amount_total = fields.Float(string='Line Total')
 
 class PdfReader(models.Model):
     _name = 'pdf.reader'
@@ -37,9 +38,15 @@ class PdfReader(models.Model):
     invoice_date = fields.Date(string='Extracted Date')
     invoice_ref = fields.Char(string='Extracted Reference')
     warning_message = fields.Char(string='Warning Message', readonly=True)
+    amount_total = fields.Float(string='Total Amount', compute='_compute_amount_total', store=True)
     
     result = fields.Text(string='Raw AI Result', readonly=True)
     line_ids = fields.One2many('pdf.reader.line', 'reader_id', string='Extracted Lines')
+
+    @api.depends('line_ids.amount_total')
+    def _compute_amount_total(self):
+        for record in self:
+            record.amount_total = sum(line.amount_total for line in record.line_ids)
 
     def action_read_pdf(self):
         for record in self:
@@ -135,6 +142,13 @@ class PdfReader(models.Model):
                             if desc:
                                 product = self.env['product.product'].search([('name', 'ilike', desc)], limit=1)
                                 
+                            line_amount_total = 0.0
+                            if row.get('total'):
+                                import re
+                                match = re.search(r'(\d+(?:\.\d+)?)', str(row.get('total', '')))
+                                if match:
+                                    line_amount_total = float(match.group(1))
+
                             lines_to_create.append((0, 0, {
                                 'col1': desc,
                                 'product_id': product.id if product else False,
@@ -144,6 +158,7 @@ class PdfReader(models.Model):
                                 'col5': str(row.get('total', '')),
                                 'col6': str(row.get('discount', '')),
                                 'col7': str(row.get('tax_rate', '')),
+                                'amount_total': line_amount_total,
                             }))
                         record.write({'line_ids': lines_to_create})
                         
