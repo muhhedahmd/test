@@ -1,14 +1,14 @@
-<record id="move_form" model="ir.ui.view">
-    <field name="name">account.move.form</field>
-    <field name="model">account.move</field>
-    <field name="arch" type="xml">
-        <form>
-            <sheet>
-                <group>
-                    <field name="move_type"/>
-                    <field name="name"/>
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_custom_account_move" model="ir.ui.view">
+        <field name="name">view.custom.account.move</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='delivery_date']" position="after">
+                <field name="account_custom_id"/>
+                <field name="name"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

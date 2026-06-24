@@ -8,6 +8,7 @@ class AccountCustomType(models.Model):
     des = fields.Char(string="des")
 
 class Acconting(models.Model):
-    _name = "account.move"
+    _inherit = "account.move"
+    
     account_custom_id = fields.Many2one("account.custom.type")
     name = fields.Char(string="name")
