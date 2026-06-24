@@ -69,7 +69,13 @@ class PdfReader(models.Model):
 
             # Send to Gemini API
             try:
-                client = genai.Client(api_key="AQ.Ab8RN6LvI0jCjYexjREyBEJpNQp4mzKoIoH7S9kKS3beP5eXRA")
+                api_key = self.env['ir.config_parameter'].sudo().get_param('pdf_reader.gemini_api_key')
+                if not api_key:
+                    record.result = "API Key not found. Please set 'pdf_reader.gemini_api_key' in Technical -> System Parameters."
+                    continue
+                
+                client = genai.Client(api_key=api_key)
+                
 
                 if record.document_type == 'invoice':
                     system_instruction = (
