@@ -1,0 +1,179 @@
+import base64
+import io
+import json
+import PyPDF2
+from odoo import models, fields, api
+from google import genai
+
+class PdfReaderLine(models.Model):
+    _name = 'pdf.reader.line'
+    _description = 'PDF Reader Line'
+
+    reader_id = fields.Many2one('pdf.reader', string='Reader', ondelete='cascade')
+    col1 = fields.Char(string='Description / Product')
+    col2 = fields.Char(string='Quantity')
+    col3 = fields.Char(string='Price')
+    col4 = fields.Char(string='Taxes')
+    col5 = fields.Char(string='Total')
+
+class PdfReader(models.Model):
+    _name = 'pdf.reader'
+    _description = 'PDF Reader using Gemini'
+
+    name = fields.Char(string='Name', required=True)
+    document_type = fields.Selection([
+        ('invoice', 'Vendor Bill / Invoice'),
+    ], string='Document Type', default='invoice', required=True)
+    pdf_file = fields.Binary(string='PDF File', required=True)
+    pdf_filename = fields.Char(string='Filename')
+    prompt = fields.Text(string='Prompt', default='Extract the invoice data.')
+    
+    # Preview Fields
+    partner_name = fields.Char(string='Extracted Partner Name')
+    invoice_date = fields.Date(string='Extracted Date')
+    invoice_ref = fields.Char(string='Extracted Reference')
+    
+    result = fields.Text(string='Raw AI Result', readonly=True)
+    line_ids = fields.One2many('pdf.reader.line', 'reader_id', string='Extracted Lines')
+
+    def action_read_pdf(self):
+        for record in self:
+            if not record.pdf_file:
+                continue
+
+            record.line_ids.unlink()
+
+            # 1. Extract Text from PDF
+            try:
+                pdf_data = base64.b64decode(record.pdf_file)
+                pdf_file_obj = io.BytesIO(pdf_data)
+                pdf_reader = PyPDF2.PdfReader(pdf_file_obj)
+                
+                extracted_text = ""
+                for page in pdf_reader.pages:
+                    extracted_text += page.extract_text() + "\n"
+            except Exception as e:
+                record.result = f"Error reading PDF: {e}"
+                continue
+
+            # 2. Send to Gemini API
+            try:
+                client = genai.Client(api_key="AQ.Ab8RN6LvI0jCjYexjREyBEJpNQp4mzKoIoH7S9kKS3beP5eXRA")
+
+                if record.document_type == 'invoice':
+                    system_instruction = (
+                        "You are an expert AI extraction tool. Extract the invoice details from the document text. "
+                        "You MUST reply strictly with a valid JSON object. Do NOT include markdown like ```json. "
+                        "The JSON object must have this exact structure: "
+                        "{ "
+                        "  \"partner_name\": \"Name of the vendor/supplier\", "
+                        "  \"invoice_date\": \"YYYY-MM-DD format if found, else empty\", "
+                        "  \"invoice_ref\": \"Invoice number or reference\", "
+                        "  \"lines\": [ "
+                        "    { \"description\": \"Product or service name\", \"quantity\": \"Numeric quantity\", \"price\": \"Unit price\", \"taxes\": \"Tax rate or amount\", \"total\": \"Line total\" } "
+                        "  ] "
+                        "}"
+                    )
+                else:
+                    system_instruction = "Extract data to JSON."
+
+                full_prompt = f"{system_instruction}\n\nUser Prompt: {record.prompt}\n\nDocument content:\n{extracted_text}"
+
+                interaction = client.interactions.create(
+                    model="gemini-3.1",
+                    input=full_prompt
+                )
+                
+                response_text = interaction.output_text.strip()
+                record.result = response_text
+
+                clean_json = response_text
+                if clean_json.startswith("```json"):
+                    clean_json = clean_json[7:]
+                if clean_json.endswith("```"):
+                    clean_json = clean_json[:-3]
+                clean_json = clean_json.strip()
+
+                try:
+                    data = json.loads(clean_json)
+                    
+                    # Update Preview Fields
+                    if record.document_type == 'invoice':
+                        record.partner_name = data.get('partner_name')
+                        record.invoice_ref = data.get('invoice_ref')
+                        if data.get('invoice_date'):
+                            try:
+                                record.invoice_date = fields.Date.to_date(data.get('invoice_date'))
+                            except:
+                                pass # ignore bad dates
+                        
+                        # Update Lines
+                        lines_data = data.get('lines', [])
+                        lines_to_create = []
+                        for row in lines_data:
+                            lines_to_create.append((0, 0, {
+                                'col1': str(row.get('description', '')),
+                                'col2': str(row.get('quantity', '')),
+                                'col3': str(row.get('price', '')),
+                                'col4': str(row.get('taxes', '')),
+                                'col5': str(row.get('total', '')),
+                            }))
+                        record.write({'line_ids': lines_to_create})
+                        
+                except Exception as json_e:
+                    record.result += f"\n\n--- JSON Parsing Error ---\nFailed to parse into preview fields.\nError: {json_e}"
+
+            except Exception as e:
+                record.result = f"Error calling Gemini API: {e}"
+
+    def action_create_invoice(self):
+        for record in self:
+            if record.document_type != 'invoice':
+                continue
+                
+            # Search for partner but DO NOT create one
+            partner_id = False
+            if record.partner_name:
+                partner = self.env['res.partner'].search([('name', 'ilike', record.partner_name)], limit=1)
+                if partner:
+                    partner_id = partner.id
+
+            # Prepare invoice lines
+            invoice_line_vals = []
+            for line in record.line_ids:
+                qty = 1.0
+                price = 0.0
+                try:
+                    qty = float(line.col2)
+                except ValueError:
+                    pass
+                try:
+                    price = float(line.col3)
+                except ValueError:
+                    pass
+                    
+                invoice_line_vals.append((0, 0, {
+                    'name': line.col1 or 'Extracted Item',
+                    'quantity': qty,
+                    'price_unit': price,
+                }))
+
+            move_vals = {
+                'move_type': 'in_invoice', # Vendor Bill
+                'ref': record.invoice_ref,
+                'invoice_date': record.invoice_date,
+                'invoice_line_ids': invoice_line_vals,
+            }
+            if partner_id:
+                move_vals['partner_id'] = partner_id
+                
+            move = self.env['account.move'].create(move_vals)
+            
+            return {
+                'name': 'Extracted Vendor Bill',
+                'view_mode': 'form',
+                'res_model': 'account.move',
+                'res_id': move.id,
+                'type': 'ir.actions.act_window',
+                'target': 'current',
+            }
