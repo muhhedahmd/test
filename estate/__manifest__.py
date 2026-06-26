@@ -1,4 +1,8 @@
-{'name':'estate',
-'depends':['base'] , 
-'application' :True,
+{
+    'name': 'estate',
+    'depends': ['base'],
+    'data': [
+        'security/ir.model.access.csv',
+    ],
+    'application': True,
 }
