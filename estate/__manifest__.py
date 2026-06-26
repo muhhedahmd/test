@@ -1,2 +1,3 @@
-'name':'estate',
-'depends':'base' 
+{'name':'estate',
+'depends':['base'] , 
+}
