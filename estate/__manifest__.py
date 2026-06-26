@@ -1,4 +1,4 @@
 {'name':'estate',
 'depends':['base'] , 
-'application' 'true'
+'application' 'True'
 }
