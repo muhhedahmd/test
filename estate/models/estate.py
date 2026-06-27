@@ -1,3 +1,4 @@
+from typing import ReadOnly
 from odoo import models, fields
 
 class Estate (models.Model):
@@ -8,3 +9,4 @@ class Estate (models.Model):
     date = fields.Date(default=fields.Date.today)
     expected_price = fields.Float(required = True)
     best_price = fields.Float(readonly=True) 
+    test= fields.Char(ReadOnly=1)
