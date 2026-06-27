@@ -22,6 +22,12 @@
                         <field name="date"/>
                         <field name="expected_price"/>
                     </group>
+ <group>
+                        <field name="best_price"/>
+                        <field name="test"/>
+                        <field name="datatime"/>
+                    </group>
+
                 </sheet>
             </form>
         </field>
