@@ -1,4 +1,3 @@
-from typing import ReadOnly
 from odoo import models, fields
 
 class Estate (models.Model):
