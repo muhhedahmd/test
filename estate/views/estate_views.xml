@@ -5,5 +5,7 @@
     <field name="view_mode">list,form</field>
 </record>
 
-<menuitem id="estate_menu" action="view_estate_tree"/>
-<odoo/>
+<menuitem id="estate_menu_root" action="view_estate_tree"/>
+<menuitem id="estate_menu_first_level" name="mune" parent="estate_menu_root"/>
+<menuitem id="estate_menu_action" name="Properties" parent="estate_menu_first_level" action="view_estate_action"/>
+</odoo>
