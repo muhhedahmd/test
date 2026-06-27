@@ -25,10 +25,21 @@
                     <group>
                         <field name="best_price"/>
                         <field name="test"/>
-                        <field name="datatime"/>
+                        <field name="last_seen"/>
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_estate_search" model="ir.ui.view">
+        <field name="name">estate.search</field>
+        <field name="model">estate</field>
+        <field name="arch" type="xml">
+            <search string="Search Properties">
+                <field name="name"/>
+                <field name="last_seen"/>
+            </search>
         </field>
     </record>
 

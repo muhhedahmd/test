@@ -5,7 +5,7 @@ class Estate (models.Model):
     _description = 'Estate'
 
     name = fields.Char(required=True)
-    datatime = fields.Datetime(default=fields.Datetime.now)
+    last_seen = fields.Datetime(default=fields.Datetime.now)
     date = fields.Date(default=fields.Date.today)
     expected_price = fields.Float(required = True)
     best_price = fields.Float(readonly=True) 
