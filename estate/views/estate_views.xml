@@ -37,7 +37,7 @@
         <field name="model">estate</field>
         <field name="arch" type="xml">
             <search string="Search Properties">
-                <field name="name"/>
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('test', 'ilike', self)]"/>
                 <field name="last_seen"/>
                 <field name="expected_price"/>
 
