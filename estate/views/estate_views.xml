@@ -1,0 +1,9 @@
+<odoo>
+<record id="view_estate_tree" model="ir.actions.act_window">
+    <field name="name">Estate</field>
+    <field name="res_model">estate</field>
+    <field name="view_mode">list,form</field>
+</record>
+
+<menuitem id="estate_menu" action="view_estate_tree"/>
+<odoo/>
