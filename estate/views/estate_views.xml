@@ -6,12 +6,11 @@
     <record id="view_estate_form" model = "ir.ui.view">
         <field name = "name">estate form</field>
         <field name = "res_model">estate</field>
-        <field name = "view_mode">form</field>
         <field name = "arch" type = "xml">
             <form>
                 <field name = "name"/>
                 <field name = "date"/>
-                <field name = "expected_price" editable="bottom"/>
+                <field name = "expected_price"/>
             </form>
         </field>
     </record>
