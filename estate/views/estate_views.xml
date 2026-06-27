@@ -22,7 +22,7 @@
                         <field name="date"/>
                         <field name="expected_price"/>
                     </group>
- <group>
+                    <group>
                         <field name="best_price"/>
                         <field name="test"/>
                         <field name="datatime"/>
