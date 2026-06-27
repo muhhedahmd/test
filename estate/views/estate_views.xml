@@ -37,12 +37,11 @@
         <field name="model">estate</field>
         <field name="arch" type="xml">
             <search string="Search Properties">
-
-                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('test', 'ilike', self)]"/>
+                <field name="name"/>
                 <field name="last_seen"/>
                 <field name="expected_price"/>
 
-                <filter string="High Price (>= 100k)" name="high_price" domain="[('expected_price', '>=', 100000)]"/>
+                <filter string="High Price (>= 100k)" name="high_price" domain="[('expected_price', '&gt;=', 100000)]"/>
                 <filter string="Inactive (Archived)" name="inactive" domain="[('active', '=', False)]"/>
 
                 <group expand="0" string="Group By">
