@@ -36,8 +36,8 @@
         <field name="model">estate</field>
         <field name="arch" type="xml">
             <search>
-                <field name="date"/>
                 <field name="name"/>
+                <field name="date"/>
             </search>
         </field>
     </record>
