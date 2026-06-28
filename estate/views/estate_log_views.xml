@@ -65,7 +65,7 @@
                     <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
                     <filter string="Action Type" name="group_by_action" context="{'group_by': 'action_type'}"/>
                     <filter string="Model" name="group_by_model" context="{'group_by': 'model_name'}"/>
-                    <filter string="Date" name="group_by_date" context="{'group_by': 'date:day'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
                 </group>
             </search>
         </field>
