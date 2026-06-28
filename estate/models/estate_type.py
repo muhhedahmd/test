@@ -1,7 +1,7 @@
 # pyrefly: ignore [missing-import]
 from odoo import models, fields
 class EstateType (models.Model):
-    _name = 'estate.type'
+    _name = 'estate_type'
     _description = 'Estate Type'
 
     name = fields.Char(required=True)
