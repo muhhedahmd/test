@@ -31,7 +31,7 @@
 
     <record id="view_estate_type_search" model="ir.ui.view">
         <field name="name">estate_type.search</field>
-        <field name="model">estate_type</field>1
+        <field name="model">estate_type</field>
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
