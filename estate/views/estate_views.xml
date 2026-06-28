@@ -59,4 +59,4 @@
         <menuitem id="estate_menu_action" name="Properties" parent="estate_menu_first_level" action="view_estate_tree"/>
     <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
     <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="view_estate_type_tree"/>
-</odoo>
+</odoo> 
