@@ -39,7 +39,6 @@
                 <field name="code"/>
                 <filter string="Test" name="test" domain="[('code','=','test')]">
                 </filter>
-                <group expand ="0" string="Group By">
             </search>
         </field>
     </record>
