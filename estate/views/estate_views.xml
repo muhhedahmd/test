@@ -24,6 +24,7 @@
                         <field name="best_price"/>
                         <field name="test"/>
                         <field name="active"/>
+                        <field name="Test1"/>
                     </group>
                 </sheet>
             </form>
