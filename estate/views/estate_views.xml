@@ -7,6 +7,7 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="Test1"/>
+                <field name="Test2"/>
                 <field name="expected_price"/>
             </list>
         </field>
