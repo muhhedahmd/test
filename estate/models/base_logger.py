@@ -40,6 +40,7 @@ class Base(models.AbstractModel):
                     rec_name = record.display_name or ''
                     self.env['estate.log'].sudo().create({
                         'name': f"Created {self._description or self._name}: {rec_name}",
+                        'user_id': self.env.user.id if self.env.user else False,
                         'action_type': 'create',
                         'model_name': self._name,
                         'model_desc': self._description,
@@ -111,6 +112,7 @@ class Base(models.AbstractModel):
                     rec_name = record.display_name or ''
                     self.env['estate.log'].sudo().create({
                         'name': f"Updated {self._description or self._name}: {rec_name}",
+                        'user_id': self.env.user.id if self.env.user else False,
                         'action_type': 'write',
                         'model_name': self._name,
                         'model_desc': self._description,
@@ -143,6 +145,7 @@ class Base(models.AbstractModel):
                         rec_name = record.display_name or ''
                         self.env['estate.log'].sudo().create({
                             'name': f"Deleted {self._description or self._name}: {rec_name}",
+                            'user_id': self.env.user.id if self.env.user else False,
                             'action_type': 'unlink',
                             'model_name': self._name,
                             'model_desc': self._description,
@@ -175,6 +178,7 @@ class Base(models.AbstractModel):
                             rec_name = self_sudo.display_name or ''
                             self.env['estate.log'].sudo().with_context(skip_read_log=True).create({
                                 'name': f"Viewed {self_sudo._description or self_sudo._name}: {rec_name}",
+                                'user_id': self.env.user.id if self.env.user else False,
                                 'action_type': 'read',
                                 'model_name': self_sudo._name,
                                 'model_desc': self_sudo._description,

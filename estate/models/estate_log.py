@@ -7,7 +7,7 @@ class EstateLog(models.Model):
     _order = 'date desc, id desc'
 
     name = fields.Char(string='Action Name', required=True)
-    user_id = fields.Many2one('res.users', string='User', required=True, default=lambda self: self.env.user)
+    user_id = fields.Many2one('res.users', string='User', required=False, default=lambda self: self.env.user)
     date = fields.Datetime(string='Date', required=True, default=fields.Datetime.now)
     action_type = fields.Selection([
         ('login', 'User Login'),
