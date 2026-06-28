@@ -3,7 +3,7 @@
         <field name="name">estate.list</field>
         <field name="model">estate</field>
         <field name="arch" type="xml">
-            <list string="Properties">
+            <list string="Properties" editable="bottom">
                 <field name="name"/>
                 <field name="date"/>
                 <field name="expected_price"/>
