@@ -13,4 +13,4 @@ class Estate (models.Model):
     test= fields.Char(readonly= True) 
     active = fields.Boolean(default=True)
     Test1 = fields.Char() 
-    Test2 = fields.Many2one('estate_type',string='Estate Type') 
+    Test2 = fields.Many2one('estate.type',string='Estate Type') 
