@@ -21,13 +21,14 @@ class ResUsers(models.Model):
                 # Create a new cursor to write to log and commit immediately
                 with Registry(db).cursor() as cr:
                     env = api.Environment(cr, user_id, {})
-                    env['estate.log'].sudo().create({
-                        'name': f"User logged in: {login}",
-                        'action_type': 'login',
-                        'user_id': user_id,
-                        'ip_address': ip,
-                        'description': f"User with login '{login}' successfully authenticated.",
-                    })
+                    if 'estate.log' in env:
+                        env['estate.log'].sudo().create({
+                            'name': f"User logged in: {login}",
+                            'action_type': 'login',
+                            'user_id': user_id,
+                            'ip_address': ip,
+                            'description': f"User with login '{login}' successfully authenticated.",
+                        })
             except Exception:
                 pass
         return user_id
