@@ -52,5 +52,5 @@
     <menuitem id="estate_menu_first_level" name="Advertisements" parent="estate_menu_root"/>
     <menuitem id="estate2_menu_first_level" name="Property Types" parent="estate_menu_root"/>
     <menuitem id="estate_menu_action" name="Properties" parent="estate_menu_first_level" action="view_estate_tree"/>
-    <menuitem id="estate2_menu_action" name="Types" parent="estate2_menu_first_level" action="view_estate_tree"/>
+    <menuitem id="estate2_menu_action" name="Types" parent="estate2_menu_first_level" action="estate_typetype"/>
 </odoo>
