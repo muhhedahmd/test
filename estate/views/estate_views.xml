@@ -48,15 +48,9 @@
         <field name="view_mode">list,form</field>
     </record>
 
-      <record id="view_estate_type_tree" model="ir.actions.act_window">
-        <field name="name">Estate Type</field>
-        <field name="res_model">estate_type</field>
-        <field name="view_mode">list,form</field>
-    </record>
    
     <menuitem id="estate_menu_root" name="Real Estate"/>
     <menuitem id="estate_menu_first_level" name="Advertisements" parent="estate_menu_root"/>
     <menuitem id="estate_menu_action" name="Properties" parent="estate_menu_first_level" action="view_estate_tree"/>
-    <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
-    <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="view_estate_type_tree"/>
+
 </odoo> 
