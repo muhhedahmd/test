@@ -40,6 +40,8 @@
             <search>
                 <field name="name"/>
                 <field name="Test1"/>
+                <filter string="Test" name="Test1" domain="[('Test1','=','test')]"/> 
+                
             </search>
         </field>
     </record>
