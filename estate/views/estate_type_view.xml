@@ -56,4 +56,3 @@
     <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
     <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="action_estate_type"/>
 </odoo> 
-</odoo> 
