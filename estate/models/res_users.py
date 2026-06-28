@@ -17,8 +17,9 @@ class ResUsers(models.Model):
                 except Exception:
                     pass
 
+                from odoo.registry import Registry
                 # Create a new cursor to write to log and commit immediately
-                with cls.pool.cursor() as cr:
+                with Registry(db).cursor() as cr:
                     env = api.Environment(cr, user_id, {})
                     env['estate.log'].sudo().create({
                         'name': f"User logged in: {login}",
