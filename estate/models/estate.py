@@ -10,5 +10,5 @@ class Estate (models.Model):
     expected_price = fields.Float(required = True)
     best_price = fields.Float(readonly=True) 
     test= fields.Char(readonly= True) 
-    active = fields.Boolean(default= False )
+    active = fields.Boolean(default=True)
     
