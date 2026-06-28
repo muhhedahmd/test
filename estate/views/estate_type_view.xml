@@ -27,13 +27,6 @@
         </field>
     </record>
 
-    <field name="estateType">
-    <list editable="bottom">
-        <field name="name"/>
-        <field name="expected_price"/>
-    </list>
-</field>
-
 
     <record id="view_estate_type_search" model="ir.ui.view">
         <field name="name">estate.type.search</field>
