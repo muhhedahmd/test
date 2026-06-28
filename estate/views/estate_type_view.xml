@@ -21,12 +21,18 @@
                         <field name="name"/>
                         <field name="code"/>
                         <field name="active"/>
-                        <field name="estateType"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
+
+    <field name="estateType">
+    <list editable="bottom">
+        <field name="name"/>
+        <field name="expected_price"/>
+    </list>
+</field>
 
 
     <record id="view_estate_type_search" model="ir.ui.view">
@@ -41,6 +47,7 @@
             </search>
         </field>
     </record>
+
 
     <record id="action_estate_type" model="ir.actions.act_window">
         <field name="name">Estate Type</field>

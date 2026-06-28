@@ -1,0 +1,85 @@
+<odoo>
+    <!-- List View -->
+    <record id="view_estate_log_list" model="ir.ui.view">
+        <field name="name">estate.log.list</field>
+        <field name="model">estate.log</field>
+        <field name="arch" type="xml">
+            <list string="User Action Logs" create="false" edit="false" delete="false">
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="action_type"/>
+                <field name="name"/>
+                <field name="model_desc"/>
+                <field name="res_name"/>
+                <field name="ip_address"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_estate_log_form" model="ir.ui.view">
+        <field name="name">estate.log.form</field>
+        <field name="model">estate.log</field>
+        <field name="arch" type="xml">
+            <form string="User Action Log" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="name"/>
+                            <field name="user_id"/>
+                            <field name="date"/>
+                            <field name="action_type"/>
+                            <field name="ip_address"/>
+                        </group>
+                        <group string="Target Record Info">
+                            <field name="model_name"/>
+                            <field name="model_desc"/>
+                            <field name="res_id"/>
+                            <field name="res_name"/>
+                        </group>
+                    </group>
+                    <group string="Action Details">
+                        <field name="description" placeholder="No details recorded"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_estate_log_search" model="ir.ui.view">
+        <field name="name">estate.log.search</field>
+        <field name="model">estate.log</field>
+        <field name="arch" type="xml">
+            <search string="Search User Logs">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="model_name"/>
+                <field name="res_name"/>
+                <filter string="User Logins" name="filter_login" domain="[('action_type', '=', 'login')]"/>
+                <filter string="Creations" name="filter_create" domain="[('action_type', '=', 'create')]"/>
+                <filter string="Updates" name="filter_write" domain="[('action_type', '=', 'write')]"/>
+                <filter string="Deletions" name="filter_unlink" domain="[('action_type', '=', 'unlink')]"/>
+                <filter string="Reads" name="filter_read" domain="[('action_type', '=', 'read')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Action Type" name="group_by_action" context="{'group_by': 'action_type'}"/>
+                    <filter string="Model" name="group_by_model" context="{'group_by': 'model_name'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_estate_log" model="ir.actions.act_window">
+        <field name="name">User Action Logs</field>
+        <field name="res_model">estate.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_estate_log_search"/>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="estate_menu_logs_first_level" name="Security &amp; Audit" parent="estate_menu_root" sequence="90"/>
+    <menuitem id="estate_menu_log_action" name="User Action Logs" parent="estate_menu_logs_first_level" action="action_estate_log" sequence="10"/>
+</odoo>
