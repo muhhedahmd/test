@@ -51,7 +51,7 @@
         <field name="name">estate.log.search</field>
         <field name="model">estate.log</field>
         <field name="arch" type="xml">
-            <search string="Search User Logs">
+            <search>
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="model_name"/>
