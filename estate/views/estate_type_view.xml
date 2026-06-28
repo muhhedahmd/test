@@ -7,7 +7,6 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="active"/>
-                <field name="Test2"/>
             </list>
         </field>
     </record>
@@ -22,7 +21,7 @@
                         <field name="name"/>
                         <field name="code"/>
                         <field name="active"/>
-                        <field name="Test2"/>
+                        <field name="estateType"/>
                     </group>
                 </sheet>
             </form>
@@ -52,6 +51,4 @@
     <menuitem id="estate_menu_root" name="Real Estate"/>
     <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
     <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="action_estate_type"/>
-    <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
-    <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="action_estate_type"/>
-</odoo> 
+</odoo>
