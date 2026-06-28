@@ -3,7 +3,7 @@
         <field name="name">estate_type.list</field>
         <field name="model">estate_type</field>
         <field name="arch" type="xml">
-            <list string="Properties" editable="bottom">
+            <list string="Properties">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="active"/>

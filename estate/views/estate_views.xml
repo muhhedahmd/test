@@ -37,7 +37,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="date"/>
+                <field name="Test1"/>
             </search>
         </field>
     </record>
