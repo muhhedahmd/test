@@ -7,4 +7,4 @@ class EstateType (models.Model):
     name = fields.Char(required=True)
     code = fields.Char(required=True)
     active = fields.Boolean(default=True)
-    estateType = fields.Many2many('estate', 'Test2', string='Estate Type')
+    estateType = fields.One2many('estate', 'Test2', string='Estate Type')
