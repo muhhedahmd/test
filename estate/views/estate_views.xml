@@ -27,6 +27,7 @@
                         <field name="test"/>
                         <field name="active"/>
                         <field name="Test1"/>
+                        <field name="Test2"/>
                     </group>
                 </sheet>
             </form>
