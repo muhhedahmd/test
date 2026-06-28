@@ -35,8 +35,8 @@
             <search>
                 <field name="name"/>
                 <field name="code"/>
-                <filter string="Test" name="zxx" domain="[('code','=','zxx')]"/>
-                <filter string="Actif" name="active" domain="[('active','=',Tasrue)]"/>
+                <filter string="Test" name="test" domain="[('code','=','test')]">
+                </filter>
             </search>
         </field>
     </record>
