@@ -7,7 +7,7 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="active"/>
-                <field name="Test2"/>
+                <!-- <field name="Test2"/> -->
             </list>
         </field>
     </record>
