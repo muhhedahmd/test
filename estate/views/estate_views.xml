@@ -36,17 +36,13 @@
         <field name="model">estate</field>
         <field name="arch" type="xml">
             <search>
-                <field name="expected_price"/>
-                <filter string="High Price (>= 100k)" name="high_price" domain="[('expected_price', '&gt;=', 100000)]"/>
-                <filter string="Inactive (Archived)" name="inactive" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
-                </group>
+                <field name="date"/>
+                <field name="name"/>
             </search>
         </field>
     </record>
 
-    <record id="view_estate_tree1" model="ir.actions.act_window">
+    <record id="view_estate_tree" model="ir.actions.act_window">
         <field name="name">Estate</field>
         <field name="res_model">estate</field>
         <field name="view_mode">list,form</field>
