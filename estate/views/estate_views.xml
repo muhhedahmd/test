@@ -6,6 +6,7 @@
             <list string="Properties" editable="bottom">
                 <field name="name"/>
                 <field name="date"/>
+                <field name="Test1"/>
                 <field name="expected_price"/>
             </list>
         </field>
