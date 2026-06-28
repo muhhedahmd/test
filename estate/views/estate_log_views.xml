@@ -53,20 +53,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="user_id"/>
-                <field name="model_name"/>
-                <field name="res_name"/>
-                <filter string="User Logins" name="filter_login" domain="[('action_type', '=', 'login')]"/>
-                <filter string="Creations" name="filter_create" domain="[('action_type', '=', 'create')]"/>
-                <filter string="Updates" name="filter_write" domain="[('action_type', '=', 'write')]"/>
-                <filter string="Deletions" name="filter_unlink" domain="[('action_type', '=', 'unlink')]"/>
-                <filter string="Reads" name="filter_read" domain="[('action_type', '=', 'read')]"/>
-                <group expand="0" string="Group By">
-                    <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
-                    <filter string="Action Type" name="group_by_action" context="{'group_by': 'action_type'}"/>
-                    <filter string="Model" name="group_by_model" context="{'group_by': 'model_name'}"/>
-                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
-                </group>
             </search>
         </field>
     </record>
