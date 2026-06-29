@@ -1,5 +1,5 @@
 # pyrefly: ignore [missing-import]
-from odoo import models, fields
+from odoo import models, fields, api
 
 class Estate (models.Model):
     _name = 'estate'
@@ -14,3 +14,10 @@ class Estate (models.Model):
     active = fields.Boolean(default=True)
     Test1 = fields.Char() 
     Test2 = fields.Many2one('estate.type',string='Estate Type') 
+
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        res = super(Estate, self).fields_get(allfields, attributes=attributes)
+        for field in res:
+            res[field]['sortable'] = False
+        return res 
