@@ -3,6 +3,11 @@
         <field name="name">estate.list</field>
         <field name="model">estate</field>
         <field name="arch" type="xml">
+            <!-- 
+
+            CSS: <list string="Properties" class="no_sort_table">
+            OWL: <list string="Properties" class="disable_sort">
+            -->
             <list string="Properties" >
                 <field name="name"/>
                 <field name="date"/>
