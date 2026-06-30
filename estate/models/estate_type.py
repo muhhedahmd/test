@@ -11,8 +11,12 @@ class EstateType (models.Model):
     active = fields.Boolean(default=True)
     estateType = fields.One2many('estate', 'Test2', string='Estate Type')
    
-    def action_test(self):
+    def action_test_1(self):
         properties = self.env["estate"].search([])
         print("properties", properties)
         return True
-
+    #test 
+    def action_test(self):
+        print("test")
+        for rec in self:
+            print("record", rec)
