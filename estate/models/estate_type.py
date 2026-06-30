@@ -12,7 +12,7 @@ class EstateType (models.Model):
     estateType = fields.One2many('estate', 'Test2', string='Estate Type')
     def action_test(self):
         properties = self.env["estate"].search([])
-        print(properties)
+        print("properties", properties)
         return True
 #test
 
