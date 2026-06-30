@@ -14,3 +14,5 @@ class EstateType (models.Model):
         properties = self.env["estate"].search([])
         print(properties)
         return True
+#test
+
