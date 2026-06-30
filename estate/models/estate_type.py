@@ -12,3 +12,4 @@ class EstateType (models.Model):
     def action_test(self):
         properties = self.env["estate"].search([])
         print(properties)
+        return True

@@ -16,6 +16,9 @@
         <field name="model">estate.type</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_test" type="object" string="Test Action" class="oe_highlight"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
