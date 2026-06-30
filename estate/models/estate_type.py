@@ -10,9 +10,10 @@ class EstateType (models.Model):
     code = fields.Char(required=True)
     active = fields.Boolean(default=True)
     estateType = fields.One2many('estate', 'Test2', string='Estate Type')
+   
     def action_test(self):
-        properties = self.env["estate"].search([])
         print("properties", properties)
+        properties = self.env["estate"].search([])
         return True
 #test
 
