@@ -3,8 +3,7 @@ from odoo import models, fields
 class EstateType (models.Model):
     _name = 'estate.type'
     _description = 'Estate Type'
-
-    _rec_name = 'name'
+    # _rec_name = 'name'
     _order = "id desc"
 
     name = fields.Char(required=True)
