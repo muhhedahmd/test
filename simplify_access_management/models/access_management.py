@@ -42,6 +42,9 @@ class access_management(models.Model):
     hide_import = fields.Boolean()
     hide_spreadsheet = fields.Boolean()
     hide_add_property = fields.Boolean()
+    # NOTE: Added for search_menu_patch.js compatibility — used to hide Custom Filter / Group By UI
+    hide_custom_filter = fields.Boolean('Hide Custom Filter')
+    hide_custom_group = fields.Boolean('Hide Custom Group By')
     disable_login = fields.Boolean('Disable Login')
 
     disable_debug_mode = fields.Boolean('Disable Developer Mode')
@@ -233,3 +236,20 @@ class access_management(models.Model):
                         hidden_fields.append(field.name)
             return hidden_fields
         return []
+
+    @api.model
+    def is_custom_filter_and_group_available(self, model=False):
+        # NOTE: Called by search_menu_patch.js to determine if Custom Filter / Group By should be hidden.
+        hide_filter = False
+        hide_group = False
+        access_ids = self.search([
+            ('user_ids', 'in', self.env.user.id),
+            ('company_ids', 'in', self.env.company.id),
+            ('active', '=', True),
+        ])
+        for access in access_ids:
+            if access.hide_custom_filter:
+                hide_filter = True
+            if access.hide_custom_group:
+                hide_group = True
+        return {'filter': hide_filter, 'group': hide_group}

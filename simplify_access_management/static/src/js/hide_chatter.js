@@ -5,7 +5,8 @@ import { ListController } from "@web/views/list/list_controller";
 import { FormController } from "@web/views/form/form_controller";
 import { session } from "@web/session";
 import { patch } from "@web/core/utils/patch";
-import { jsonrpc } from "@web/core/network/rpc_service";
+// NOTE: Odoo 19 fix — jsonrpc from "@web/core/network/rpc_service" was removed in Odoo 17.
+// Import removed as it is unused — all RPC calls use this.orm service instead.
 import { useService } from "@web/core/utils/hooks";
 
 import { onMounted } from "@odoo/owl";
