@@ -3,7 +3,7 @@
         <field name="name">estate.type.list</field>
         <field name="model">estate.type</field>
         <field name="arch" type="xml">
-            <list string="Properties" editable="top" decoration-success="active">
+            <list string="Properties" editable="top" decoration-success="active" decoration-danger="not active">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="active"/>
