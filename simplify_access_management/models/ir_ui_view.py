@@ -108,11 +108,14 @@ class ir_ui_view(models.Model):
             for tab in page_store_model_nodes_ids:
                 attribute_string = tab.attribute_string
                 if tab.lang_code != self.env.lang:
-                    field = self.env['ir.ui.view']._fields['arch_db']
-                    translation_dictionary = field.get_translation_dictionary(
-                        self.with_context(lang=tab.lang_code).arch_db,
-                        {self.env.lang: self.with_context(lang=self.env.lang)['arch_db']})
-                    attribute_string = translation_dictionary[attribute_string][self.env.lang]
+                    try:
+                        field = self.env['ir.ui.view']._fields['arch_db']
+                        translation_dictionary = field.get_translation_dictionary(
+                            self.with_context(lang=tab.lang_code).arch_db,
+                            {self.env.lang: self.with_context(lang=self.env.lang)['arch_db']})
+                        attribute_string = translation_dictionary[attribute_string][self.env.lang]
+                    except Exception:
+                        pass
                 if attribute_string == node.get('string'):
                     # if node.get('name'):
                     # if tab.attribute_name == node.get('name'):
@@ -185,11 +188,14 @@ class ir_ui_view(models.Model):
                 'page_store_model_nodes_ids'):
                 attribute_string = setting_tab.attribute_string
                 if setting_tab.lang_code != self.env.lang:
-                    field = self.env['ir.ui.view']._fields['arch_db']
-                    translation_dictionary = field.get_translation_dictionary(
-                        self.with_context(lang=setting_tab.lang_code).arch_db,
-                        {self.env.lang: self.with_context(lang=self.env.lang)['arch_db']})
-                    attribute_string = translation_dictionary[attribute_string][self.env.lang]
+                    try:
+                        field = self.env['ir.ui.view']._fields['arch_db']
+                        translation_dictionary = field.get_translation_dictionary(
+                            self.with_context(lang=setting_tab.lang_code).arch_db,
+                            {self.env.lang: self.with_context(lang=self.env.lang)['arch_db']})
+                        attribute_string = translation_dictionary[attribute_string][self.env.lang]
+                    except Exception:
+                        pass
                 if node.get('data-key') == setting_tab.attribute_name:
                     # if node.get('string') == attribute_string and node.get('data-key') == setting_tab.attribute_name:
                     node_info['invisible'] = True

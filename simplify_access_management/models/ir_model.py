@@ -36,5 +36,6 @@ class ir_module_module(models.Model):
             for record in self.env['ir.model'].search([]):
                 if record.name == 'Email Thread':
                     pass
-                record.abstract = self.env[record.model]._abstract
+                if record.model in self.env:
+                    record.abstract = self.env[record.model]._abstract
         return res

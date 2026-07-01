@@ -86,7 +86,7 @@ class access_management(models.Model):
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         # user.clear_caches()
         # self.clear_caches()
-        request.registry.clear_cache()
+        self.env.registry.clear_all_caches()
         for record in res:
             if record.readonly:
                 for user in record.user_ids:
@@ -97,7 +97,7 @@ class access_management(models.Model):
     def unlink(self):
         res = super(access_management, self).unlink()
         # self.clear_caches()
-        request.env.registry.clear_cache()
+        self.env.registry.clear_all_caches()
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         #     user.clear_caches()
         return res
@@ -113,7 +113,7 @@ class access_management(models.Model):
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         #     user.clear_caches()
         # self.clear_caches()
-        request.env.registry.clear_cache()
+        self.env.registry.clear_all_caches()
         return res
 
     def get_remove_options(self, model):

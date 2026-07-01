@@ -32,9 +32,9 @@ class hide_filters_groups(models.Model):
             for view in view_list:
                 for views in view_obj.search([('model', '=', self.model_name), ('type', '=', view)]):  #
                     # res = self.env[self.model_name].sudo().fields_view_get(view_id=views.id, view_type=view)
-                    arch, view = self.env[self.model_name].sudo()._get_view(view_id=views.id, view_type=view)
-                    # doc = etree.XML(res['arch'])
-                    doc = arch
+                    arch_res = self.env[self.model_name].sudo()._get_view(view_id=views.id, view_type=view)
+                    arch = arch_res[0] if isinstance(arch_res, tuple) else arch_res
+                    doc = etree.XML(arch) if isinstance(arch, (str, bytes)) else arch
                     object_groups = doc.xpath("//group")
                     for obj_group in object_groups:
                         for group in obj_group:
