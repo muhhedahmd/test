@@ -4,12 +4,13 @@
 
         <record id="access_management_form_view_ah" model="ir.ui.view">
             <field name="name">access_management_form_view_ah</field>
+            <field name="group_ids" eval="[(4, ref('group_access_management_spt'))]"/>
             <field name="model">access.management</field>
             <field name="arch" type="xml">
                 <form context="{'buypass_access':True}">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <field name="active" invisible="1" readonly="1"/>
+                            <field name="active" invisible="1"/>
                             <button invisible="active == False" class="oe_stat_button"
                                     name="toggle_active_value" type="object" icon="fa-stop">
                                 <div class="o_stat_info o_form_field">
@@ -378,7 +379,7 @@
         </record>
 
         <menuitem id="main_menu_simplify_access_management" name="Access Studio" action="action_access_management_ah"
-                  groups="base.group_system"
+                  groups="group_access_management_spt"
                   web_icon="simplify_access_management,static/description/icon.png"/>
 
     </data>
