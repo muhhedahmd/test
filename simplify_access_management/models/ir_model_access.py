@@ -15,7 +15,7 @@ class ir_model_access(models.Model):
     # not be really necessary as a cache key, unless the `ormcache_context`
     # decorator catches the exception (it does not at the moment.) 
     @api.model
-    @tools.ormcache_context('self.env.uid', 'self.env.su', 'model', 'mode', 'raise_exception', keys=('lang',))
+    @tools.ormcache('self.env.uid', 'self.env.su', 'model', 'mode', 'raise_exception')
     def check(self, model, mode='read', raise_exception=True):
         if model == 'mail.thread':
             return True
