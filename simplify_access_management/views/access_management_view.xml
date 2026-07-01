@@ -347,12 +347,8 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name" string="Name"/>
-                    <field name="user_ids"/>
                     <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
-                    <group expand="0" string="Group By">
-                        <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'create_uid'}"/>
-                    </group>
-                    <!-- COMMENTED OUT: Odoo 19 searchpanel does not natively support Many2many fields (user_ids and company_ids), which causes view validation crashes. -->
+                    <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'create_uid'}"/>
                 </search>
             </field>
         </record>
