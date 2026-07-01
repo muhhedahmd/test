@@ -34,16 +34,16 @@ class ir_model_access(models.Model):
             This part is writen to by pass base access rule and apply dynamic rule of access management rule,
             In case of any record found in access management.
         """
-        value = self._cr.execute(
+        value = self.env.cr.execute(
             """SELECT value from ir_config_parameter where key='uninstall_simplify_access_management' """)
-        value = self._cr.fetchone()
+        value = self.env.cr.fetchone()
         if not value:
             if model:
                 try:
-                    self._cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
-                    model_numeric_id = self._cr.fetchone()[0]
+                    self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
+                    model_numeric_id = self.env.cr.fetchone()[0]
                     if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
-                        self._cr.execute("""
+                        self.env.cr.execute("""
                                         SELECT dm.id
                                         FROM access_domain_ah as dm
                                         WHERE dm.model_id=%s AND dm.access_management_id 
@@ -56,7 +56,7 @@ class ir_model_access(models.Model):
                                         """, [model_numeric_id, self.env.user.id])
                     
                         access_domain_ah_ids = self.env['access.domain.ah'].browse(
-                            row[0] for row in self._cr.fetchall()).filtered(
+                            row[0] for row in self.env.cr.fetchall()).filtered(
                             lambda line: self.env.company in line.access_management_id.company_ids)
                         if access_domain_ah_ids:
                             return True
@@ -64,26 +64,26 @@ class ir_model_access(models.Model):
                     pass
 
         # We check if a specific rule exists
-        self._cr.execute("""SELECT MAX(CASE WHEN perm_{mode} THEN 1 ELSE 0 END)
+        self.env.cr.execute("""SELECT MAX(CASE WHEN perm_{mode} THEN 1 ELSE 0 END)
                               FROM ir_model_access a
                               JOIN ir_model m ON (m.id = a.model_id)
                               JOIN res_groups_users_rel gu ON (gu.gid = a.group_id)
                              WHERE m.model = %s
                                AND gu.uid = %s
                                AND a.active IS TRUE""".format(mode=mode),
-                         (model, self._uid,))
-        r = self._cr.fetchone()[0]
+                         (model, self.env.uid,))
+        r = self.env.cr.fetchone()[0]
 
         if not r:
             # there is no specific rule. We check the generic rule
-            self._cr.execute("""SELECT MAX(CASE WHEN perm_{mode} THEN 1 ELSE 0 END)
+            self.env.cr.execute("""SELECT MAX(CASE WHEN perm_{mode} THEN 1 ELSE 0 END)
                                   FROM ir_model_access a
                                   JOIN ir_model m ON (m.id = a.model_id)
                                  WHERE a.group_id IS NULL
                                    AND m.model = %s
                                    AND a.active IS TRUE""".format(mode=mode),
                              (model,))
-            r = self._cr.fetchone()[0]
+            r = self.env.cr.fetchone()[0]
 
         if not r and raise_exception:
             groups = '\n'.join('\t- %s' % g for g in self.group_names_with_access(model, mode))
@@ -109,7 +109,7 @@ class ir_model_access(models.Model):
 
             resolution_info = _("Contact your administrator to request access if necessary.")
 
-            _logger.info('Access Denied by ACLs for operation: %s, uid: %s, model: %s', mode, self._uid, model)
+            _logger.info('Access Denied by ACLs for operation: %s, uid: %s, model: %s', mode, self.env.uid, model)
             msg = """{operation_error}
 
 {group_info}
@@ -123,26 +123,26 @@ class ir_model_access(models.Model):
 
         try:
             read_value = True
-            self._cr.execute("SELECT state FROM ir_module_module WHERE name='simplify_access_management'")
-            data = self._cr.fetchone() or False
+            self.env.cr.execute("SELECT state FROM ir_module_module WHERE name='simplify_access_management'")
+            data = self.env.cr.fetchone() or False
             if data and data[0] != 'installed':
                 read_value = False
             if self.env.user.id and read_value and request.httprequest.cookies.get('cids'):
                 a = "select access_management_id from access_management_comapnay_rel where company_id = " + str(
                     request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[
                         0] or request.env.company.id)
-                self._cr.execute(a)
-                a = self._cr.fetchall()
+                self.env.cr.execute(a)
+                a = self.env.cr.fetchall()
                 if a:
                     a = "select access_management_id from access_management_users_rel_ah where user_id = " + str(
                         self.env.user.id) + " AND access_management_id in " + str(tuple([i[0] for i in a] + [0]))
-                    self._cr.execute(a)
-                    a = self._cr.fetchall()
+                    self.env.cr.execute(a)
+                    a = self.env.cr.fetchall()
                     if a:
                         a = "SELECT id FROM access_management WHERE active='t' AND id in " + str(
                             tuple([i[0] for i in a] + [0])) + " and readonly = True"
-                        self._cr.execute(a)
-                        a = self._cr.fetchall()
+                        self.env.cr.execute(a)
+                        a = self.env.cr.fetchall()
                 if bool(a):
                     if mode != 'read':
                         return False

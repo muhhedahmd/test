@@ -12,5 +12,5 @@ class base_module_uninstall(models.TransientModel):
                 value.value = "True"
             else:
                 param_obj.create({'key':'uninstall_check','value':'True'})
-            self._cr.commit()
+            self.env.cr.commit()
         return super(base_module_uninstall, self).action_uninstall()

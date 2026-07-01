@@ -15,7 +15,7 @@ class ir_ui_view(models.Model):
                 for hide_field in hide_field_obj.search(
                         [('access_management_id.company_ids', 'in', self.env.company.id),
                          ('model_id.model', '=', name_manager.model._name), ('access_management_id.active', '=', True),
-                         ('access_management_id.user_ids', 'in', self._uid)]):
+                         ('access_management_id.user_ids', 'in', self.env.uid)]):
                     for field_id in hide_field.field_id:
                         # print(node.get('name'), '\n')
                         if (node.tag == 'field' and node.get('name') == field_id.name) or (
@@ -64,7 +64,7 @@ class ir_ui_view(models.Model):
         hide_button_ids = hide_button_obj.sudo().search(
             [('access_management_id.company_ids', 'in', self.env.company.id),
              ('model_id.model', '=', name_manager.model._name), ('access_management_id.active', '=', True),
-             ('access_management_id.user_ids', 'in', self._uid)])
+             ('access_management_id.user_ids', 'in', self.env.uid)])
 
         # Filtered with same env user and current model
         btn_store_model_nodes_ids = hide_button_ids.mapped('btn_store_model_nodes_ids')
@@ -99,7 +99,7 @@ class ir_ui_view(models.Model):
         hide_tab_ids = hide_tab_obj.sudo().search([('access_management_id.company_ids', 'in', self.env.company.id),
                                                    ('model_id.model', '=', name_manager.model._name),
                                                    ('access_management_id.active', '=', True),
-                                                   ('access_management_id.user_ids', 'in', self._uid)])
+                                                   ('access_management_id.user_ids', 'in', self.env.uid)])
         # translation_obj = self.env['ir.translation']
         # Filtered with same env user and current model
         page_store_model_nodes_ids = hide_tab_ids.mapped('page_store_model_nodes_ids')
@@ -141,7 +141,7 @@ class ir_ui_view(models.Model):
         hide_tab_ids = hide_tab_obj.sudo().search([('access_management_id.company_ids', 'in', self.env.company.id),
                                                    ('model_id.model', '=', name_manager.model._name),
                                                    ('access_management_id.active', '=', True),
-                                                   ('access_management_id.user_ids', 'in', self._uid)])
+                                                   ('access_management_id.user_ids', 'in', self.env.uid)])
         # translation_obj = self.env['ir.translation']
         # Filtered with same env user and current model
         link_store_model_nodes_ids = hide_tab_ids.mapped('link_store_model_nodes_ids')
@@ -181,7 +181,7 @@ class ir_ui_view(models.Model):
             for setting_tab in hide_button_obj.search([('access_management_id.company_ids', 'in', self.env.company.id),
                                                        ('model_id.model', '=', name_manager.model._name),
                                                        ('access_management_id.active', '=', True),
-                                                       ('access_management_id.user_ids', 'in', self._uid)]).mapped(
+                                                       ('access_management_id.user_ids', 'in', self.env.uid)]).mapped(
                 'page_store_model_nodes_ids'):
                 attribute_string = setting_tab.attribute_string
                 if setting_tab.lang_code != self.env.lang:
@@ -207,7 +207,7 @@ class ir_ui_view(models.Model):
             hide_filter_group_obj = self.env['hide.filters.groups'].sudo().search(
                 [('access_management_id.company_ids', 'in', self.env.company.id),
                  ('model_id.model', '=', name_manager.model._name), ('access_management_id.active', '=', True),
-                 ('access_management_id.user_ids', 'in', self._uid)])
+                 ('access_management_id.user_ids', 'in', self.env.uid)])
 
             for hide_field_obj in hide_filter_group_obj:
                 for hide_filter in hide_field_obj.filters_store_model_nodes_ids.mapped('attribute_name'):

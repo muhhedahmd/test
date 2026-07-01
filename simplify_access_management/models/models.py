@@ -304,10 +304,10 @@ class BaseModel(models.AbstractModel):
         records = None
         try:
             if model:
-                self._cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
-                model_numeric_id = self._cr.fetchone()[0]
+                self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
+                model_numeric_id = self.env.cr.fetchone()[0]
                 if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
-                    self._cr.execute("""
+                    self.env.cr.execute("""
                                     SELECT dm.id
                                     FROM access_domain_ah as dm
                                     WHERE dm.model_id=%s AND dm.access_management_id 
@@ -318,7 +318,7 @@ class BaseModel(models.AbstractModel):
                                             FROM access_management_users_rel_ah as amusr
                                             WHERE amusr.user_id=%s))
                                     """, [model_numeric_id, self.env.user.id])
-                    records = self.env['access.domain.ah'].browse(row[0] for row in self._cr.fetchall())
+                    records = self.env['access.domain.ah'].browse(row[0] for row in self.env.cr.fetchall())
         except:
             pass
         return records

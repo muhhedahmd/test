@@ -23,11 +23,11 @@ class ir_rule(models.Model):
         res = super(ir_rule, self)._compute_domain(model_name, mode)
 
         read_value = True
-        self._cr.execute("SELECT state FROM ir_module_module WHERE name='simplify_access_management'")
-        data = self._cr.fetchone() or False
+        self.env.cr.execute("SELECT state FROM ir_module_module WHERE name='simplify_access_management'")
+        data = self.env.cr.fetchone() or False
 
-        self._cr.execute("SELECT id FROM ir_module_module WHERE state IN ('to upgrade', 'to remove','to install')")
-        all_data = self._cr.fetchone() or False
+        self.env.cr.execute("SELECT id FROM ir_module_module WHERE state IN ('to upgrade', 'to remove','to install')")
+        all_data = self.env.cr.fetchone() or False
 
         if data and data[0] != 'installed':
             read_value = False
@@ -36,14 +36,14 @@ class ir_rule(models.Model):
 
         if self.env.user.id and read_value and not all_data:
             if model_name not in model_list:
-                self._cr.execute("""SELECT am.id FROM access_management as am
+                self.env.cr.execute("""SELECT am.id FROM access_management as am
                                     WHERE active='t' AND readonly = True AND am.id 
                                     IN (SELECT au.access_management_id 
                                         FROM access_management_users_rel_ah as au 
                                         WHERE user_id = %s AND am.id 
                                         IN (SELECT ac.access_management_id
                                             FROM access_management_comapnay_rel as ac)) """ % (self.env.user.id)) 
-                # self._cr.execute("""SELECT am.id FROM access_management as am
+                # self.env.cr.execute("""SELECT am.id FROM access_management as am
                 #                     WHERE active='t' AND readonly = True AND am.id 
                 #                     IN (SELECT au.access_management_id 
                 #                         FROM access_management_users_rel_ah as au 
@@ -52,36 +52,36 @@ class ir_rule(models.Model):
                 #                             FROM access_management_comapnay_rel as ac
                 #                             WHERE ac.company_id=%s)) """ % (self.env.user.id, self.env.company.id)) 
                 # a = "select access_management_id from access_management_comapnay_rel where company_id = " + str(self.env.company.id)
-                # self._cr.execute(a)
-                # a = self._cr.fetchall()
+                # self.env.cr.execute(a)
+                # a = self.env.cr.fetchall()
                 # if a:   
                 #     a = "select access_management_id from access_management_users_rel_ah where user_id = " + str(self.env.user.id) + " AND access_management_id in " + str(tuple([i[0] for i in a]+[0]))
-                #     self._cr.execute(a)
-                #     a = self._cr.fetchall()
+                #     self.env.cr.execute(a)
+                #     a = self.env.cr.fetchall()
                 #     if a:
                 #         a = "SELECT id FROM access_management WHERE active='t' AND id in " + str(tuple([i[0] for i in a]+[0])) + " and readonly = True"
-                #         self._cr.execute(a)
-                #         a = self._cr.fetchall()
-                a = self._cr.fetchall()
+                #         self.env.cr.execute(a)
+                #         a = self.env.cr.fetchall()
+                a = self.env.cr.fetchall()
                 if bool(a):
                     if mode != 'read' and model_name not in ['mail.channel.partner']:
                         raise UserError(
                             _('%s is a read-only user. So you can not make any changes in the system!') % self.env.user.name)
-        value = self._cr.execute(
+        value = self.env.cr.execute(
             """SELECT value from ir_config_parameter where key='uninstall_simplify_access_management' """)
-        value = self._cr.fetchone()
+        value = self.env.cr.fetchone()
         if not value:
-            value = self._cr.execute("""select state from ir_module_module where name = 'simplify_access_management'""")
-            value = self._cr.fetchone()
+            value = self.env.cr.execute("""select state from ir_module_module where name = 'simplify_access_management'""")
+            value = self.env.cr.fetchone()
             value = value and value[0] or False
             if model_name and value == 'installed':
                 # if model_name:
-                self._cr.execute("SELECT id FROM ir_model WHERE model='" + model_name + "'")
-                model_numeric_id = self._cr.fetchone()
+                self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model_name + "'")
+                model_numeric_id = self.env.cr.fetchone()
                 model_numeric_id = model_numeric_id and model_numeric_id[0] or False
                 if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
                     try:
-                        self._cr.execute("""
+                        self.env.cr.execute("""
                                         SELECT dm.id
                                         FROM access_domain_ah as dm
                                         WHERE dm.model_id=%s AND dm.apply_domain AND dm.access_management_id 
@@ -95,7 +95,7 @@ class ir_rule(models.Model):
                     # except:
                     #     pass
                         access_domain_ah_ids = self.env['access.domain.ah'].browse(
-                            row[0] for row in self._cr.fetchall()).filtered(
+                            row[0] for row in self.env.cr.fetchall()).filtered(
                             lambda line: self.env.company in line.access_management_id.company_ids)
                     # access_domain_ah_ids = access_domain_ah_ids.filtered(lambda line: self.env.company in line.access_management_id.company_ids)
                     except:
@@ -104,8 +104,8 @@ class ir_rule(models.Model):
                         domain_list = []
                         if model_name == 'res.partner':
                             # jo aya user related jetala partner 6 ana access alag thi apididha 6 error no ave atle
-                            self._cr.execute("""SELECT partner_id FROM res_users""")
-                            partner_ids = [row[0] for row in self._cr.fetchall()]
+                            self.env.cr.execute("""SELECT partner_id FROM res_users""")
+                            partner_ids = [row[0] for row in self.env.cr.fetchall()]
                             domain_list = ['|', ('id', 'in', partner_ids)]
                         left_user = False
                         eval_context = self._eval_context()
