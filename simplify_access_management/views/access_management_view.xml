@@ -345,7 +345,7 @@
             <field name="name">access.management.search.view</field>
             <field name="model">access.management</field>
             <field name="arch" type="xml">
-                <search>
+                <search> 
                     <field name="name" string="Name"/>
                     <field name="user_ids"/>
                     <field name="active"/>
