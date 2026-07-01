@@ -227,7 +227,7 @@ class access_management(models.Model):
             for hide_field in hide_field_obj.search(
                         [('access_management_id.company_ids', 'in', self.env.company.id),
                          ('model_id.model', '=', model), ('access_management_id.active', '=', True),
-                         ('access_management_id.user_ids', 'in', self._uid), ('invisible', '=', True)]):
+                          ('access_management_id.user_ids', 'in', self.env.uid), ('invisible', '=', True)]):
                 for field in hide_field.field_id:
                     if field.name:
                         hidden_fields.append(field.name)

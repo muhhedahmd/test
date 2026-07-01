@@ -11,7 +11,7 @@ class ir_model(models.Model):
     @api.depends_context('is_access_rights')
     def _compute_display_name(self):
         super()._compute_display_name()
-        if self._context.get('is_access_rights'):
+        if self.env.context.get('is_access_rights'):
             for model in self:
                 model.display_name = "{} ({})".format(model.name, model.model)
 
@@ -22,7 +22,7 @@ class IrModelField(models.Model):
     @api.depends_context('is_access_rights')
     def _compute_display_name(self):
         super()._compute_display_name()
-        if self._context.get('is_access_rights'):
+        if self.env.context.get('is_access_rights'):
             for field in self:
                 field.display_name = "{} => {} ({})".format(field.field_description, field.name, field.model_id.model)
 

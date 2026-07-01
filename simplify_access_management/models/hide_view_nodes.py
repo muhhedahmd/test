@@ -26,7 +26,7 @@ class hide_view_nodes(models.Model):
 
     def _store_btn_data(self, btn, smart_button=False, smart_button_string=False):
         # string_value is used in case of kanban view button store, 
-        string_value = 'string_value' in self._context.keys() and self._context['string_value'] or False
+        string_value = self.env.context.get('string_value') or False
 
         store_model_button_obj = self.env['store.model.nodes']
         name = btn.get('string') or string_value
