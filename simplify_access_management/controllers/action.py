@@ -48,14 +48,16 @@ class Home(Home):
         # request.env.registry.clear_cache()
         request.env.registry.clear_all_caches()
         
-        user = request.env.user.browse(request.session.uid)
-        # if len(user.company_ids) > 1:
-        #     request.env['ir.ui.menu'].clear_caches()
-        if not kw.get('debug') or kw.get('debug') != "0":
-            cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or request.env.company.id
-            access_management = request.env['access.management'].sudo().search([('active','=',True),('company_ids','in',int(cids)),('disable_debug_mode','=',True),('user_ids','in',user.id)],limit=1)
-            if access_management.id:
-                return request.redirect('/web?debug=0')
-                # request.session.debug = '0'
+        if request.session.uid:
+            user = request.env.user.browse(request.session.uid)
+            # if len(user.company_ids) > 1:
+            #     request.env['ir.ui.menu'].clear_caches()
+            if not kw.get('debug') or kw.get('debug') != "0":
+                cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or request.env.company.id
+                if cids:
+                    access_management = request.env['access.management'].sudo().search([('active','=',True),('company_ids','in',int(cids)),('disable_debug_mode','=',True),('user_ids','in',user.id)],limit=1)
+                    if access_management.id:
+                        return request.redirect('/web?debug=0')
+                        # request.session.debug = '0'
 
         return super(Home, self).web_client(s_action=s_action, **kw)
