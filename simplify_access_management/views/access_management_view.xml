@@ -357,10 +357,12 @@
                     <group expand="0" string="Group By">
                         <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'create_uid'}"/>
                     </group>
+                    <!-- COMMENTED OUT: Odoo 19 searchpanel does not natively support Many2many fields (user_ids and company_ids), which causes view validation crashes.
                     <searchpanel>
                         <field name="user_ids" select="multi" string="Users" enable_counters="1"/>
                         <field name="company_ids" select="multi" string="Companies" enable_counters="1"/>
                     </searchpanel>
+                    -->
                 </search>
             </field>
         </record>
