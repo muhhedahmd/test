@@ -14,6 +14,7 @@ class Estate (models.Model):
     active = fields.Boolean(default=True)
     Test1 = fields.Char() 
     Test2 = fields.Many2one('estate.type',string='Estate Type') 
+    type_code = fields.Char(related='Test2.code', string='Type Code', readonly=True, store=True) 
 
     @api.model
     def fields_get(self, allfields=None, attributes=None):

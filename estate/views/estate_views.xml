@@ -13,6 +13,7 @@
                 <field name="date"/>
                 <field name="Test1"/>
                 <field name="Test2"/>
+                <field name="type_code"/>
                 <field name="expected_price"/>
             </list>
         </field>
@@ -33,6 +34,7 @@
                         <field name="active"/>
                         <field name="Test1"/>
                         <field name="Test2"/>
+                        <field name="type_code"/>
                     </group>
                 </sheet>
             </form>
