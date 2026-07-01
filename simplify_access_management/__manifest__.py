@@ -153,6 +153,80 @@
         Fleet access
         Multi Company supported.
         """,
+    # COMMENTED OUT: The description field was commented out because Odoo renders it raw in the Apps list, taking up the whole screen.
+    # Leaving it commented allows Odoo to automatically fallback to rendering static/description/index.html nicely with a "Read More" button.
+    # 'description': """
+    #     All In One Access Management App for setting the correct access rights for fields, models, menus, views for any module and for any user.
+    #     Configuring correct access rights in Odoo is quite technical for someone who has little experience with the system and can get messy if you are not sure what you are doing. This module helps you avoid all this complexity by providing you with a user friendly interface from where you can define access to specific objects in one place such as -
+    # 
+    #     Model/App access (Reports, Actions, Views, Readonly, Create, Write, Delete, Export, Archive etc.)
+    #     Fields access (Invisible, Readonly fields for any model/app)
+    #     Menu access(Hide any menu/submenu for any model/app for selected users)
+    #     Views Access (Hide any view such as Tree view, Form view, Kanban view, Calendar view, Pivot & Graph view, etc)
+    #     Hide Tabs and buttons
+    #     Or, make any user Readonly
+    #     Also the app allows you to create user-wise access management so that you can add/remove users to and from any group(s) in batch and with much ease.
+    #     If you want to hide unwanted menu, sub-menu,fields,button(smart button and regular button), report action for any users, then you can use this app.
+    #     
+    #     All in one access management App,
+    #     Easier then Record rules setup,
+    #     Centralize access rules,
+    #     User wise access rules,
+    #     Show only what is needed for users,
+    #     Access rules setup,
+    #     Easy access rights setup, Hide Any Menu, Any Field, Any Report, Any Button,
+    #     Easy To Configure,
+    #     
+    #     
+    #     
+    #     
+    #     Main Features:-
+    #     Hide fields,
+    #     Hide Buttons,
+    #     Hide Tabs,
+    #     Hide views,
+    #     Hide Contacts,
+    #     Hide Menus,
+    #     Hide submenus,
+    #     Hide sub-menus,
+    #     Hide reports,
+    #     Hide actions,
+    #     Hide server actions,
+    #     Hide import,
+    #     Hide delete,
+    #     Hide archive,
+    #     Hide Tree view, 
+    #     Hide Form view, 
+    #     Hide Kanban view, 
+    #     Hide Calendar view, 
+    #     Hide Pivot,
+    #     Hide Graph view,
+    #     Hide Apps,
+    #     Hide object buttons,
+    #     Hide action buttons,
+    #     Hide smart buttons,
+    #     Readonly Any Field,
+    #     read only user,
+    #     readonly user,
+    #     Hide create,
+    #     Hide duplicate,
+    #     Control every fields,
+    #     Control every views,
+    #     Control every buttons,
+    #     Control every actions,
+    #     user access,
+    #     advance user,
+    #     model access rights,
+    #     sales access rights,sales user permissions,
+    #     inventery access rights, timesheet access rights,
+    #     accounting access rights, accounting user permission,
+    #     invoicing access rights,
+    #     purchase access rights ,
+    #     crm access rights ,
+    #     all in one access rights manager
+    #     Delight POS theme | Advance POS Theme | point of sale theme | Theme POS | Odoo POS theme
+    #     Point of sale split bill | Point of sale split order | POS split bill | POS split invoices
+    # """,
     "images": ["static/description/banner.gif"],
     "price": "370.99",
     "currency": "USD",
@@ -176,6 +250,10 @@
         ],
 
     },
+    # COMMENTED OUT DEPENDENCY: 'advanced_web_domain_widget' was commented out here to avoid Odoo.sh installation failure.
+    # Since 'advanced_web_domain_widget' is a commercial module and not loaded in Odoo.sh addons path, 
+    # we commented it out and bundled its widget helper logic directly in 'simplify_access_management'.
+    # 'depends': ['web', 'advanced_web_domain_widget'],
     'depends': ['web'],
     'post_init_hook': 'post_install_action_dup_hook',
     'application': True,
@@ -183,3 +261,4 @@
     'auto_install': False,
     'live_test_url': 'https://www.terabits.xyz/request_demo?source=index&version=17&app=simplify_access_management',
 }
+
