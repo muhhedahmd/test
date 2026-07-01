@@ -341,11 +341,12 @@
             </field>
         </record>
 
-        <record id="access_management_search_view" model="ir.ui.view">
-            <field name="name">access.management.search.view</field>
+        <!-- COMMENTED OUT ORIGINAL SEARCH VIEW:
+        <record id="access_management_search_view_original" model="ir.ui.view">
+            <field name="name">access.management.search.view.original</field>
             <field name="model">access.management</field>
             <field name="arch" type="xml">
-                <search> 
+                <search>
                     <field name="name" string="Name"/>
                     <field name="user_ids"/>
                     <field name="active"/>
@@ -357,12 +358,21 @@
                     <group expand="0" string="Group By">
                         <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'create_uid'}"/>
                     </group>
-                    <!-- COMMENTED OUT: Odoo 19 searchpanel does not natively support Many2many fields (user_ids and company_ids), which causes view validation crashes.
                     <searchpanel>
                         <field name="user_ids" select="multi" string="Users" enable_counters="1"/>
                         <field name="company_ids" select="multi" string="Companies" enable_counters="1"/>
                     </searchpanel>
-                    -->
+                </search>
+            </field>
+        </record>
+        -->
+
+        <record id="access_management_search_view" model="ir.ui.view">
+            <field name="name">access.management.search.view</field>
+            <field name="model">access.management</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Name"/>
                 </search>
             </field>
         </record>
