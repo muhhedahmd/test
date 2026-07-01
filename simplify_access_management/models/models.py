@@ -116,7 +116,7 @@ class BaseModel(models.AbstractModel):
                     for div in arch.xpath("//div[@class='oe_chatter']"):
                         div.getparent().remove(div)
 
-        if view_type in ['kanban', 'tree']:
+        if view_type in ['kanban', 'list']:
             restrict_import = access_management_obj.search([('company_ids', 'in', self.env.company.id),
                                                             ('active', '=', True),
                                                             ('user_ids', 'in', self.env.user.id),
@@ -141,7 +141,7 @@ class BaseModel(models.AbstractModel):
             if view_type == 'form':
                 arch.attrib.update({'create': 'false', 'delete': 'false', 'edit': 'false'})
 
-            if view_type == 'tree':
+            if view_type == 'list':
                 arch.attrib.update({'create': 'false', 'delete': 'false', 'edit': 'false'})
 
             if view_type == 'kanban':
@@ -164,7 +164,7 @@ class BaseModel(models.AbstractModel):
                 if view_type == 'form':
                     arch.attrib.update({'create': create, 'delete': delete, 'edit': edit})
 
-                if view_type == 'tree':
+                if view_type == 'list':
                     arch.attrib.update({'create': create, 'delete': delete, 'edit': edit})
 
                 if view_type == 'kanban':
@@ -185,7 +185,7 @@ class BaseModel(models.AbstractModel):
                 if view_type == 'form':
                     arch.attrib.update({'create': create, 'delete': delete, 'edit': edit})
 
-                if view_type == 'tree':
+                if view_type == 'list':
                     arch.attrib.update({'create': create, 'delete': delete, 'edit': edit})
 
                 if view_type == 'kanban':

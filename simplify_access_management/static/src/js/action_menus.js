@@ -1,8 +1,13 @@
 /* @odoo-module */
 import { ActionMenus } from "@web/search/action_menus/action_menus";
 import { patch } from "@web/core/utils/patch";
+import { useService } from "@web/core/utils/hooks";
 
 patch(ActionMenus.prototype, {
+  setup() {
+    super.setup(...arguments);
+    this.orm = useService("orm");
+  },
   async getActionItems(props) {
     let res = await super.getActionItems(props);
     const RestActions = await this.orm.call(

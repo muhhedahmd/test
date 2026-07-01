@@ -58,7 +58,7 @@
         </record>
         <record id="view_data_list_ah" model="view.data">
             <field name="name">List</field>
-            <field name="techname">tree</field>
+            <field name="techname">list</field>
         </record>
     </data>
 </odoo>

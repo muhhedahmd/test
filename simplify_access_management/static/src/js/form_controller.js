@@ -1,12 +1,14 @@
 /** @odoo-module **/
 import { patch } from "@web/core/utils/patch";
 import { FormController } from "@web/views/form/form_controller";
+import { useService } from "@web/core/utils/hooks";
 
 import { onWillStart, useState } from "@odoo/owl";
 
 patch(FormController.prototype, {
     setup() {
-        super.setup();
+        super.setup(...arguments);
+        this.orm = useService("orm");
         this.access = useState({removeProperty: false});
         onWillStart(async() => {
             this.access.removeProperty = await this.orm.call(
@@ -16,10 +18,11 @@ patch(FormController.prototype, {
             );
         })
     },
-    get actionMenuItems() {
-        const menuItems = super.actionMenuItems;
-        if(this.access.removeProperty)
-            menuItems.action = menuItems.action.filter(ele => this.access.removeProperty && ele.key != "addPropertyFieldValue");
-        return menuItems;
+    getStaticActionMenuItems() {
+        const items = super.getStaticActionMenuItems(...arguments);
+        if (this.access.removeProperty && items.addPropertyFieldValue) {
+            delete items.addPropertyFieldValue;
+        }
+        return items;
     }
-})
+});

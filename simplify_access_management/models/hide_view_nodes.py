@@ -94,7 +94,7 @@ class hide_view_nodes(models.Model):
 
         if self.model_id and self.model_name:
 
-            view_list = ['form', 'tree', 'kanban']
+            view_list = ['form', 'list', 'kanban']
             for view in view_list:
                 for views in view_obj.search([('model', '=', self.model_name), ('type', '=', view)]):
                     res = self.env[self.model_name].sudo().get_view(view_id=views.id, view_type=view)

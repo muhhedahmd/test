@@ -3,13 +3,15 @@
 import { patch } from "@web/core/utils/patch";
 import { CogMenu } from "@web/search/cog_menu/cog_menu";
 import { registry } from "@web/core/registry";
+import { useService } from "@web/core/utils/hooks";
 
 import { onWillStart, useState } from "@odoo/owl";
 const cogMenuRegistry = registry.category("cogMenu");
 
 patch(CogMenu.prototype, {
     setup() {
-        super.setup();
+        super.setup(...arguments);
+        this.orm = useService("orm");
         this.access = useState({removeSpreadsheet: false});
         onWillStart(async() => {
             if(this?.env?.config?.actionType == "ir.actions.act_window") {
