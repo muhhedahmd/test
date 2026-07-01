@@ -29,18 +29,22 @@ class res_users(models.Model):
         return res
 
 
+    # NOTE: Odoo 19 changed _login signature from (cls, db, login, password, user_agent_env)
+    #       to (cls, credential, user_agent_env=None) where credential is a dict.
+    #       Old implementation caused TypeError when auth_passkey called super()._login().
     @classmethod
-    def _login(cls, db, login, password, user_agent_env):
-        res = super(res_users, cls)._login(db, login, password, user_agent_env=user_agent_env)
-        try:            
-            with cls.pool.cursor() as cr:   
-                self = api.Environment(cr, SUPERUSER_ID, {})[cls._name] 
+    def _login(cls, credential, user_agent_env=None):
+        res = super(res_users, cls)._login(credential, user_agent_env=user_agent_env)
+        try:
+            db = user_agent_env.get('db') if user_agent_env else None
+            login = credential.get('login') if isinstance(credential, dict) else credential
+            with cls.pool.cursor() as cr:
+                self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
                 access_management_obj = self.env['access.management']
-
-                if access_management_obj.search([('user_ids','in',res),('disable_login','=',True)]).id:
+                if access_management_obj.search([('user_ids', 'in', res), ('disable_login', '=', True)]).id:
                     raise AccessDenied()
         except AccessDenied:
-            _logger.info("Login failed for db:%s login:%s from ", db, login)
+            _logger.info("Login failed for db:%s login:%s", db, login)
             raise
         return res
         
