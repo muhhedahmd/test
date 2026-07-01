@@ -20,6 +20,7 @@
                     <button name="action_test" type="object" string="Test Action" class="oe_highlight"/>
                     <button name="action_test_1" type="object" string="Test Action 1" class="oe_highlight"/>
                 </header>
+                
                 <sheet>
                     <group>
                         <field name="name"/>
