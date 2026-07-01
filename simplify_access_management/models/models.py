@@ -45,37 +45,40 @@ class BaseModel(models.AbstractModel):
         #         res['views'].pop(view)
         return res
 
-    @api.model
-    def load_views(self, views, options=None):
-        actions_and_prints = []
-        for access in self.env['remove.action'].search([('access_management_id.company_ids', 'in', self.env.company.id),
-                                                        ('access_management_id', 'in',
-                                                         self.env.user.access_management_ids.ids),
-                                                        ('model_id.model', '=', self._name)]):
-            actions_and_prints = actions_and_prints + access.mapped('report_action_ids.action_id').ids
-            actions_and_prints = actions_and_prints + access.mapped('server_action_ids.action_id').ids
-            for view_data in access.view_data_ids:
-                for view_data_list in views:
-                    if view_data.techname == view_data_list[1]:
-                        views.pop(views.index(view_data_list))
-
-        res = super(BaseModel, self).load_views(views, options=options)
-
-        if 'fields_views' in res.keys():
-            for view in ['list', 'form']:
-                if view in res['fields_views'].keys():
-                    if 'toolbar' in res['fields_views'][view].keys():
-                        if 'print' in res['fields_views'][view]['toolbar'].keys():
-                            prints = res['fields_views'][view]['toolbar']['print'][:]
-                            for pri in prints:
-                                if pri['id'] in actions_and_prints:
-                                    res['fields_views'][view]['toolbar']['print'].remove(pri)
-                        if 'print' in res['fields_views'][view]['toolbar'].keys():
-                            action = res['fields_views'][view]['toolbar']['action'][:]
-                            for act in action:
-                                if act['id'] in actions_and_prints:
-                                    res['fields_views'][view]['toolbar']['action'].remove(act)
-        return res
+    # NOTE: Odoo 19 fix — load_views() was removed in Odoo 17. Calling super().load_views() raises AttributeError.
+    # The get_views() override above (line 12) handles the equivalent Odoo 19 functionality.
+    # Preserved as comment to keep original logic visible.
+    # @api.model
+    # def load_views(self, views, options=None):
+    #     actions_and_prints = []
+    #     for access in self.env['remove.action'].search([('access_management_id.company_ids', 'in', self.env.company.id),
+    #                                                     ('access_management_id', 'in',
+    #                                                      self.env.user.access_management_ids.ids),
+    #                                                     ('model_id.model', '=', self._name)]):
+    #         actions_and_prints = actions_and_prints + access.mapped('report_action_ids.action_id').ids
+    #         actions_and_prints = actions_and_prints + access.mapped('server_action_ids.action_id').ids
+    #         for view_data in access.view_data_ids:
+    #             for view_data_list in views:
+    #                 if view_data.techname == view_data_list[1]:
+    #                     views.pop(views.index(view_data_list))
+    #
+    #     res = super(BaseModel, self).load_views(views, options=options)
+    #
+    #     if 'fields_views' in res.keys():  # NOTE: key renamed to 'views' in Odoo 17+
+    #         for view in ['list', 'form']:
+    #             if view in res['fields_views'].keys():
+    #                 if 'toolbar' in res['fields_views'][view].keys():
+    #                     if 'print' in res['fields_views'][view]['toolbar'].keys():
+    #                         prints = res['fields_views'][view]['toolbar']['print'][:]
+    #                         for pri in prints:
+    #                             if pri['id'] in actions_and_prints:
+    #                                 res['fields_views'][view]['toolbar']['print'].remove(pri)
+    #                     if 'print' in res['fields_views'][view]['toolbar'].keys():
+    #                         action = res['fields_views'][view]['toolbar']['action'][:]
+    #                         for act in action:
+    #                             if act['id'] in actions_and_prints:
+    #                                 res['fields_views'][view]['toolbar']['action'].remove(act)
+    #     return res
 
     @api.model
     def _get_view(self, view_id=None, view_type='form', **options):
@@ -304,7 +307,8 @@ class BaseModel(models.AbstractModel):
         records = None
         try:
             if model:
-                self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
+                # NOTE: Odoo 19 fix — use parameterized query to prevent SQL injection.
+                self.env.cr.execute("SELECT id FROM ir_model WHERE model=%s", [model])
                 model_numeric_id = self.env.cr.fetchone()[0]
                 if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
                     self.env.cr.execute("""

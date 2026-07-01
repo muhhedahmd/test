@@ -82,8 +82,9 @@ class ir_ui_view(models.Model):
                     #     break
         if hide:
             node.set('invisible', '1')
-            if 'attrs' in node.attrib.keys() and node.attrib['attrs']:
-                del node.attrib['attrs']
+            # NOTE: Odoo 19 fix — 'attrs' attribute was removed in Odoo 17. This block is dead code in Odoo 19.
+            # if 'attrs' in node.attrib.keys() and node.attrib['attrs']:
+            #     del node.attrib['attrs']
             node_info['invisible'] = True
 
         return None
@@ -137,7 +138,8 @@ class ir_ui_view(models.Model):
         # Hide Any Notebook Page
         postprocessor = getattr(super(ir_ui_view, self), '_postprocess_tag_a', False)
         if postprocessor:
-            super(ir_ui_view, self)._postprocess_tag_page(node, name_manager, node_info)
+            # NOTE: Odoo 19 fix — was incorrectly calling _postprocess_tag_page. Fixed to _postprocess_tag_a.
+            super(ir_ui_view, self)._postprocess_tag_a(node, name_manager, node_info)
 
         hide = None
         hide_tab_obj = self.env['hide.view.nodes']
@@ -165,8 +167,9 @@ class ir_ui_view(models.Model):
                     #     break    
         if hide:
             node.set('invisible', '1')
-            if 'attrs' in node.attrib.keys() and node.attrib['attrs']:
-                del node.attrib['attrs']
+            # NOTE: Odoo 19 fix — 'attrs' attribute was removed in Odoo 17. This block is dead code in Odoo 19.
+            # if 'attrs' in node.attrib.keys() and node.attrib['attrs']:
+            #     del node.attrib['attrs']
 
             node_info['invisible'] = True
 
@@ -176,7 +179,8 @@ class ir_ui_view(models.Model):
         # Hide Any Notebook Page
         postprocessor = getattr(super(ir_ui_view, self), '_postprocess_tag_div', False)
         if postprocessor:
-            super(ir_ui_view, self)._postprocess_tag_page(node, name_manager, node_info)
+            # NOTE: Odoo 19 fix — was incorrectly calling _postprocess_tag_page. Fixed to _postprocess_tag_div.
+            super(ir_ui_view, self)._postprocess_tag_div(node, name_manager, node_info)
 
         hide_button_obj = self.env['hide.view.nodes'].sudo()
 
@@ -207,7 +211,8 @@ class ir_ui_view(models.Model):
         # Hide Any Notebook Page
         postprocessor = getattr(super(ir_ui_view, self), '_postprocess_tag_filter', False)
         if postprocessor:
-            super(ir_ui_view, self)._postprocess_tag_page(node, name_manager, node_info)
+            # NOTE: Odoo 19 fix — was incorrectly calling _postprocess_tag_page. Fixed to _postprocess_tag_filter.
+            super(ir_ui_view, self)._postprocess_tag_filter(node, name_manager, node_info)
 
         if node.tag == 'filter' or node.tag == 'group':
             hide_filter_group_obj = self.env['hide.filters.groups'].sudo().search(

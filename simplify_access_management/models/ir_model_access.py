@@ -40,7 +40,8 @@ class ir_model_access(models.Model):
         if not value:
             if model:
                 try:
-                    self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model + "'")
+                    # NOTE: Odoo 19 fix — use parameterized query to prevent SQL injection.
+                    self.env.cr.execute("SELECT id FROM ir_model WHERE model=%s", [model])
                     model_numeric_id = self.env.cr.fetchone()[0]
                     if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
                         self.env.cr.execute("""
@@ -75,21 +76,29 @@ class ir_model_access(models.Model):
             data = self.env.cr.fetchone() or False
             if data and data[0] != 'installed':
                 read_value = False
-            if self.env.user.id and read_value and request.httprequest.cookies.get('cids'):
-                a = "select access_management_id from access_management_comapnay_rel where company_id = " + str(
-                    request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[
-                        0] or request.env.company.id)
-                self.env.cr.execute(a)
+            # NOTE: Odoo 19 fix — request may be None outside HTTP context. Wrapped in try/except.
+            # NOTE: Odoo 19 fix — replaced string-concatenated SQL with parameterized queries.
+            try:
+                has_cids = request.httprequest.cookies.get('cids')
+            except Exception:
+                has_cids = None
+            if self.env.user.id and read_value and has_cids:
+                cid = int(request.httprequest.cookies.get('cids').split(',')[0])
+                self.env.cr.execute(
+                    "select access_management_id from access_management_comapnay_rel where company_id = %s",
+                    [cid])
                 a = self.env.cr.fetchall()
                 if a:
-                    a = "select access_management_id from access_management_users_rel_ah where user_id = " + str(
-                        self.env.user.id) + " AND access_management_id in " + str(tuple([i[0] for i in a] + [0]))
-                    self.env.cr.execute(a)
+                    am_ids = tuple([i[0] for i in a] + [0])
+                    self.env.cr.execute(
+                        "select access_management_id from access_management_users_rel_ah where user_id = %s AND access_management_id in %s",
+                        [self.env.user.id, am_ids])
                     a = self.env.cr.fetchall()
                     if a:
-                        a = "SELECT id FROM access_management WHERE active='t' AND id in " + str(
-                            tuple([i[0] for i in a] + [0])) + " and readonly = True"
-                        self.env.cr.execute(a)
+                        am_ids2 = tuple([i[0] for i in a] + [0])
+                        self.env.cr.execute(
+                            "SELECT id FROM access_management WHERE active='t' AND id in %s and readonly = True",
+                            [am_ids2])
                         a = self.env.cr.fetchall()
                 if bool(a):
                     if mode != 'read':

@@ -76,7 +76,8 @@ class ir_rule(models.Model):
             value = value and value[0] or False
             if model_name and value == 'installed':
                 # if model_name:
-                self.env.cr.execute("SELECT id FROM ir_model WHERE model='" + model_name + "'")
+                # NOTE: Odoo 19 fix — use parameterized query to prevent SQL injection.
+                self.env.cr.execute("SELECT id FROM ir_model WHERE model=%s", [model_name])
                 model_numeric_id = self.env.cr.fetchone()
                 model_numeric_id = model_numeric_id and model_numeric_id[0] or False
                 if model_numeric_id and isinstance(model_numeric_id, int) and self.env.user:
