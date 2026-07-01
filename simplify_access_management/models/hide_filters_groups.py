@@ -82,11 +82,9 @@ class store_model_nodes(models.Model):
     attribute_name = fields.Char('Attribute Name')
     attribute_string = fields.Char('Attribute String', required=True)
 
-    def name_get(self):
-        result = []
+    def _compute_display_name(self):
         for rec in self:
-            name = rec.attribute_string
+            name = rec.attribute_string or ''
             if rec.attribute_name:
                 name = name + ' (' + rec.attribute_name + ')'
-            result.append((rec.id, name))
-        return result
+            rec.display_name = name
