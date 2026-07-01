@@ -1,5 +1,9 @@
 # pyrefly: ignore [missing-import]
 from odoo import models, fields
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class EstateType (models.Model):
     _name = 'estate.type'
     _description = 'Estate Type'
@@ -13,10 +17,10 @@ class EstateType (models.Model):
    
     def action_test_1(self):
         properties = self.env["estate"].search([])
-        print("properties", properties)
+        _logger.info("properties: %s", properties)
         return True
     #test 
     def action_test(self):
-        print("test")
+        _logger.info("test")
         for rec in self:
-            print("record", rec)
+            _logger.info("record: %s", rec)
