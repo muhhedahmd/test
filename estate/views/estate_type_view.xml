@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_estate_type_list" model="ir.ui.view">
+        <field name="name">estate.type.list</field>
+        <field name="model">estate.type</field>
+        <field name="arch" type="xml">
+            <list string="Properties" editable="top" decoration-success="active" decoration-danger="not active">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+                <field name="estateType"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_estate_type_form" model="ir.ui.view">
+        <field name="name">estate.type.form</field>
+        <field name="model">estate.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test" type="object" string="Test Action" class="oe_highlight"/>
+                    <button name="action_test_1" type="object" string="Test Action 1" class="oe_highlight"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_estate_type_search" model="ir.ui.view">
+        <field name="name">estate.type.search</field>
+        <field name="model">estate.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Test" name="test" domain="[('code','=','test')]">
+                </filter>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_estate_type" model="ir.actions.act_window">
+        <field name="name">Estate Type</field>
+        <field name="res_model">estate.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+   
+    <menuitem id="estate_menu_root" name="Real Estate"/>
+    <menuitem id="estate2_menu_first_level" name="Types" parent="estate_menu_root"/>
+    <menuitem id="estate2_menu_action" name="Type" parent="estate2_menu_first_level" action="action_estate_type"/>
+</odoo>

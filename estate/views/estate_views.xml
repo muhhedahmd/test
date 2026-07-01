@@ -1,0 +1,69 @@
+<odoo>
+    <record id="view_estate_list" model="ir.ui.view">
+        <field name="name">estate.list</field>
+        <field name="model">estate</field>
+        <field name="arch" type="xml">
+            <!-- 
+
+            CSS: <list string="Properties" class="no_sort_table">
+            OWL: <list string="Properties" class="disable_sort">
+            -->
+            <list string="Properties" >
+                <field name="name"/>
+                <field name="date"/>
+                <field name="Test1"/>
+                <field name="Test2"/>
+                <field name="type_code"/>
+                <field name="expected_price"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_estate_form" model="ir.ui.view">
+        <field name="name">estate.form</field>
+        <field name="model">estate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="expected_price"/>
+                        <field name="best_price"/>
+                        <field name="test"/>
+                        <field name="active"/>
+                        <field name="Test1"/>
+                        <field name="Test2"/>
+                        <field name="type_code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_estate_search" model="ir.ui.view">
+        <field name="name">estate.search</field>
+        <field name="model">estate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="Test1"/>
+                <filter string="Test" name="Test1" domain="[('Test1','=','test')]"/> 
+                
+            </search>
+        </field>
+    </record>
+
+    <record id="view_estate_tree" model="ir.actions.act_window">
+        <field name="name">Estate</field>
+        <field name="res_model">estate</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+   
+    <menuitem id="estate_menu_root" name="Real Estate"/>
+    <menuitem id="estate_menu_first_level" name="Advertisements" parent="estate_menu_root"/>
+    <menuitem id="estate_menu_action" name="Properties" parent="estate_menu_first_level" action="view_estate_tree"/>
+
+</odoo> 
