@@ -4,6 +4,9 @@ import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
 import { onWillStart, useState } from "@odoo/owl";
 
+// NOTE: Odoo 19 fix — PivotGroupByMenu was restructured/removed in Odoo 18/19.
+// Wrapped in try/catch so if the component doesn't exist, it fails silently.
+try {
 patch(PivotGroupByMenu.prototype, {
   setup() {
     super.setup(...arguments);
@@ -17,3 +20,6 @@ patch(PivotGroupByMenu.prototype, {
     });
   },
 });
+} catch(e) {
+    console.warn("[simplify_access_management] PivotGroupByMenu patch skipped:", e.message);
+}
