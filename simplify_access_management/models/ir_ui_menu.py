@@ -41,6 +41,7 @@ class ir_ui_menu(models.Model):
     def load_menus(self, debug=False):
         _logger.info("Access Management - load_menus method entered! self: %s, debug: %s", self, debug)
         res = super(ir_ui_menu, self).load_menus(debug)
+        _logger.info("Access Management - load_menus res type: %s, keys: %s", type(res), list(res.keys()) if isinstance(res, dict) else 'Not a dict')
         # Be defensive: normalize different possible return shapes from Odoo core
         if not res or not isinstance(res, dict) or 'menus' not in res:
             return res
