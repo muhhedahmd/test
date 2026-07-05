@@ -8,6 +8,10 @@ import { useService } from "@web/core/utils/hooks";
 import { onWillStart, useState } from "@odoo/owl";
 const cogMenuRegistry = registry.category("cogMenu");
 
+// NOTE: Odoo 19 fix — CogMenu was restructured in Odoo 18/19.
+// Wrapped in try/catch so if the import or patch fails, it fails silently
+// instead of crashing the entire JS bundle.
+try {
 patch(CogMenu.prototype, {
     setup() {
         super.setup(...arguments);
@@ -40,3 +44,6 @@ patch(CogMenu.prototype, {
         return items;
     }
 })
+} catch(e) {
+    console.warn("[simplify_access_management] CogMenu patch skipped (component not found in this Odoo version):", e.message);
+}

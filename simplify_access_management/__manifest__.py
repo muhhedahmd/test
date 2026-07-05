@@ -237,6 +237,8 @@
         'views/access_management_view.xml',
         'views/res_users_view.xml',
         'views/store_model_nodes_view.xml',
+        'views/website_login_template.xml',
+        'views/'
     ],
     'assets': {
         'web.assets_backend': [
@@ -247,6 +249,7 @@
             '/simplify_access_management/static/src/js/form_controller.js',
             '/simplify_access_management/static/src/js/pivot_grp_menu.js',
             '/simplify_access_management/static/src/js/model_field_selector.js',
+            '/simplify_access_management/static/src/search_menu_patch/search_menu_patch.js',
         ],
 
     },
