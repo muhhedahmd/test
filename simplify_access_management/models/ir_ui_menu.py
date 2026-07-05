@@ -25,6 +25,69 @@ class ir_ui_menu(models.Model):
             ids = ids[:limit]
         return ids
         # return len(ids) if count else ids
+
+    @api.model
+    def load_menus(self, debug=False):
+        res = super(ir_ui_menu, self).load_menus(debug)
+        if not res or not isinstance(res, dict) or 'menus' not in res:
+            return res
+
+        user = self.env.user
+        try:
+            cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or self.env.company.id
+        except Exception:
+            cids = self.env.company.id
+
+        hide_menu_ids = user.access_management_ids.filtered(
+            lambda line: int(cids) in line.company_ids.ids
+        ).mapped('hide_menu_ids.menu_id')
+
+        if not hide_menu_ids:
+            return res
+
+        # Convert hide_menu_ids to set of both int and str to handle any key representation safely
+        to_hide = set()
+        for m in hide_menu_ids:
+            to_hide.add(m)
+            to_hide.add(str(m))
+
+        # Copy the dictionaries to avoid mutating Odoo's cached menu tree
+        res = dict(res)
+        res['menus'] = {menu_id: dict(menu) for menu_id, menu in res['menus'].items()}
+        if 'root_menu_ids' in res:
+            res['root_menu_ids'] = list(res['root_menu_ids'])
+
+        # Find all descendants of hidden menus recursively
+        added = True
+        while added:
+            added = False
+            for menu_id, menu in res['menus'].items():
+                if menu_id not in to_hide:
+                    parent_id = menu.get('parent_id')
+                    p_id = parent_id[0] if isinstance(parent_id, tuple) else parent_id
+                    if p_id in to_hide or str(p_id) in to_hide:
+                        to_hide.add(menu_id)
+                        to_hide.add(str(menu_id))
+                        added = True
+
+        # Remove hidden menus from the tree
+        res['menus'] = {
+            menu_id: menu
+            for menu_id, menu in res['menus'].items()
+            if menu_id not in to_hide
+        }
+
+        if 'root_menu_ids' in res:
+            res['root_menu_ids'] = [r for r in res['root_menu_ids'] if r not in to_hide]
+
+        # Filter the children lists in the remaining menus
+        for menu in res['menus'].values():
+            if 'children' in menu:
+                menu['children'] = [c for c in menu['children'] if c not in to_hide]
+            if 'child_id' in menu:
+                menu['child_id'] = [c for c in menu['child_id'] if c not in to_hide]
+
+        return res
     
     @api.model_create_multi
     def create(self, vals_list):
