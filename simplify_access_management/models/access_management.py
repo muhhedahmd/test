@@ -105,7 +105,6 @@ class access_management(models.Model):
         # user.clear_caches()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
-        self.env['ir.ui.menu'].clear_caches()
         for record in res:
             if record.readonly:
                 for user in record.user_ids:
@@ -117,7 +116,6 @@ class access_management(models.Model):
         res = super(access_management, self).unlink()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
-        self.env['ir.ui.menu'].clear_caches()
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         #     user.clear_caches()
         return res
@@ -135,7 +133,6 @@ class access_management(models.Model):
         #     user.clear_caches()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
-        self.env['ir.ui.menu'].clear_caches()
         return res
 
     def get_remove_options(self, model):
