@@ -1,5 +1,5 @@
 /** @odoo-module **/
-import { PivotGroupByMenu } from "@web/views/pivot/pivot_group_by_menu";
+import { PivotGroupByMenu } from "@web/views/pivot/pivot_groupby_menu";
 import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
 import { onWillStart, useState } from "@odoo/owl";

@@ -53,6 +53,24 @@ class ir_ui_view(models.Model):
         except Exception:
             pass
 
+    def _postprocess_tag_label(self, node, name_manager, node_info):
+        postprocessor = getattr(super(ir_ui_view, self), '_postprocess_tag_label', False)
+        if postprocessor:
+            super(ir_ui_view, self)._postprocess_tag_label(node, name_manager, node_info)
+        try:
+            hide_field_obj = self.env['hide.field'].sudo()
+            for hide_field in hide_field_obj.search(
+                    [('access_management_id.company_ids', 'in', self.env.company.id),
+                     ('model_id.model', '=', name_manager.model._name), ('access_management_id.active', '=', True),
+                     ('access_management_id.user_ids', 'in', self.env.uid)]):
+                for field_id in hide_field.field_id:
+                    if 'for' in node.attrib.keys() and node.attrib['for'] == field_id.name:
+                        if hide_field.invisible:
+                            node_info['invisible'] = True
+                            node.set('invisible', '1')
+        except Exception:
+            pass
+
     def _postprocess_tag_button(self, node, name_manager, node_info):
         # Hide Any Button
         postprocessor = getattr(super(ir_ui_view, self), '_postprocess_tag_button', False)

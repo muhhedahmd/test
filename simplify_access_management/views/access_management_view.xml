@@ -77,25 +77,25 @@
                                     <list editable='bottom'>
                                         <field name="model_id" context="{'is_access_rights': True}"
                                                options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
-                                               width='13' required='1'
+                                               required='1'
                                                domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
-                                        <field name="report_action_ids" width='13' widget="many2many_tags"
+                                        <field name="report_action_ids" widget="many2many_tags"
                                                options="{'no_create': True}"/>
-                                        <field name="server_action_ids" width='13' widget="many2many_tags"
+                                        <field name="server_action_ids" widget="many2many_tags"
                                                options="{'no_create': True}"/>
-                                        <field name="view_data_ids" width='8' widget="many2many_tags"
+                                        <field name="view_data_ids" widget="many2many_tags"
                                                options="{'no_create': True}"/>
-                                        <field name="restrict_create" width='10'/>
-                                        <field name="restrict_edit" width='10'/>
-                                        <field name="restrict_delete" width='10'/>
-                                        <field name="restrict_archive_unarchive" width='10'/>
-                                        <field name="restrict_duplicate" width='10'/>
-                                        <!--                                        <field name="restrict_chatter" width='10' attrs="{'column_invisible' : [('parent.hide_chatter','=',True)]}"/>-->
+                                        <field name="restrict_create"/>
+                                        <field name="restrict_edit"/>
+                                        <field name="restrict_delete"/>
+                                        <field name="restrict_archive_unarchive"/>
+                                        <field name="restrict_duplicate"/>
+                                        <!--                                        <field name="restrict_chatter" attrs="{'column_invisible' : [('parent.hide_chatter','=',True)]}"/>-->
                                         <!-- <field name="readonly" invisible="1"
                                                column_invisible="parent.readonly == True"/> -->
-                                        <field name="restrict_import" width='10'/>
-                                        <field name="restrict_export" width='10'/>
-                                        <field name="restrict_spreadsheet" width='10'/>
+                                        <field name="restrict_import"/>
+                                        <field name="restrict_export"/>
+                                        <field name="restrict_spreadsheet"/>
                                     </list>
                                 </field>
                                 <p role="alert"
@@ -129,10 +129,10 @@
                                         <field name="field_id" context="{'is_access_rights': True}"
                                                options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
                                                widget='many2many_tags' domain="[('model_id','=',model_id)]"/>
-                                        <field name="invisible" width='1'/>
-                                        <field name="readonly" width='1' column_invisible="parent.readonly == True "/>
-                                        <field name="required" width='1'/>
-                                        <field name="external_link" width='1'/>
+                                        <field name="invisible"/>
+                                        <field name="readonly" column_invisible="parent.readonly == True "/>
+                                        <field name="required"/>
+                                        <field name="external_link"/>
                                     </list>
                                 </field>
                                 <p role="alert"
