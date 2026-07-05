@@ -13,12 +13,19 @@ class ir_ui_menu(models.Model):
         user = self.env.user
         try:
             cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or self.env.company.id
+            cids = int(cids)
         except Exception:
             cids = self.env.company.id
         
-        hide_menus = user.access_management_ids.filtered(lambda line: int(cids) in line.company_ids.ids).mapped('hide_menu_ids.menu_id')
-        _logger.info("Access Management Search Debug - user: %s (ID %s), cids: %s, rules: %s, hide_menus: %s",
-                     user.name, user.id, cids, [(r.name, r.active, r.company_ids.ids) for r in user.access_management_ids], hide_menus)
+        access_management_obj = self.env['access.management'].sudo()
+        access_management_rules = access_management_obj.search([
+            ('user_ids', 'in', user.id),
+            ('company_ids', 'in', cids),
+            ('active', '=', True)
+        ])
+        hide_menus = access_management_rules.mapped('hide_menu_ids.menu_id')
+        _logger.info("Access Management Search Debug - user: %s (ID %s), cids: %s, rules found: %s, hide_menus: %s",
+                     user.name, user.id, cids, access_management_rules.mapped('name'), hide_menus)
 
         for menu_id in hide_menus:
             menu_id = self.browse(menu_id)
@@ -39,15 +46,20 @@ class ir_ui_menu(models.Model):
         user = self.env.user
         try:
             cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or self.env.company.id
+            cids = int(cids)
         except Exception:
             cids = self.env.company.id
 
-        hide_menu_ids = user.access_management_ids.filtered(
-            lambda line: int(cids) in line.company_ids.ids
-        ).mapped('hide_menu_ids.menu_id')
+        access_management_obj = self.env['access.management'].sudo()
+        access_management_rules = access_management_obj.search([
+            ('user_ids', 'in', user.id),
+            ('company_ids', 'in', cids),
+            ('active', '=', True)
+        ])
+        hide_menu_ids = access_management_rules.mapped('hide_menu_ids.menu_id')
 
-        _logger.info("Access Management Load Menus Debug - user: %s (ID %s), cids: %s, rules: %s, hide_menus: %s",
-                     user.name, user.id, cids, [(r.name, r.active, r.company_ids.ids) for r in user.access_management_ids], hide_menu_ids)
+        _logger.info("Access Management Load Menus Debug - user: %s (ID %s), cids: %s, rules found: %s, hide_menus: %s",
+                     user.name, user.id, cids, access_management_rules.mapped('name'), hide_menu_ids)
 
         if not hide_menu_ids:
             return res
