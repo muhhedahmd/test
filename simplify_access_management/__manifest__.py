@@ -246,7 +246,6 @@
             'simplify_access_management/static/src/js/hide_chatter.js',
             'simplify_access_management/static/src/js/cog_menu.js',
             'simplify_access_management/static/src/js/form_controller.js',
-            'simplify_access_management/static/src/js/pivot_grp_menu.js',
             'simplify_access_management/static/src/js/model_field_selector.js',
             'simplify_access_management/static/src/search_menu_patch/search_menu_patch.js',
         ],
