@@ -62,8 +62,29 @@ class access_management(models.Model):
                 rec.access_domain_ah_ids) + len(rec.hide_view_nodes_ids)
             rec.total_rules = rule
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        self._auto_sync_menu_items()
+        return super().create(vals_list)
+
+    def write(self, vals):
+        self._auto_sync_menu_items()
+        return super().write(vals)
+
+    def _auto_sync_menu_items(self):
+        try:
+            menu_item_obj = self.env['menu.item'].sudo()
+            existing_menu_ids = menu_item_obj.search([]).mapped('menu_id')
+            missing_menus = self.env['ir.ui.menu'].sudo().search([('id', 'not in', existing_menu_ids)])
+            if missing_menus:
+                for menu in missing_menus:
+                    menu_item_obj.create({'name': menu.display_name or menu.name, 'menu_id': menu.id})
+        except Exception:
+            pass
+
     def action_show_rules(self):
-        pass
+        self._auto_sync_menu_items()
+        return True
 
     # def _get_self_module_info(self):
     #     access_menu_id = self.env.ref('simplify_access_management.main_menu_simplify_access_management')
