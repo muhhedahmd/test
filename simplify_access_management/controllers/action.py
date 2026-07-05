@@ -35,8 +35,15 @@ class Action(Action):
                 raise UserError(_("You don't have the permission to access any views. Please contact to administrator."))
         return res
     
-
 class Home(Home):
+
+    @http.route(['/web/webclient/load_menus', '/web/webclient/load_menus/<string:unique>'], type='http', auth='user', methods=['GET'])
+    def web_load_menus(self, unique=None, **kwargs):
+        res = super(Home, self).web_load_menus(unique=unique, **kwargs)
+        res.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        res.headers['Pragma'] = 'no-cache'
+        res.headers['Expires'] = '0'
+        return res
 
     @http.route(['/web', '/web/<path:subpath>', '/odoo', '/odoo/<path:subpath>'], type='http', auth="none")
     def web_client(self, s_action=None, **kw):
