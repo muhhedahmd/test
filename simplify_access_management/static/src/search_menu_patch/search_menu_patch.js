@@ -25,7 +25,7 @@ patch(SearchBarMenu.prototype, {
 
   get hideCustomGroupBy() {
     return (
-      this.env.searchModel?.hideCustomGroupBy || this.access.removeCustomGroup
+      this.env.searchModel.hideCustomGroupBy || this.access.removeCustomGroup
     );
   },
 });
