@@ -74,7 +74,7 @@ class ir_ui_menu(models.Model):
 
         res = dict(res)
 
-        # Detect structure format:
+        # Detect structure format: 
         # Format A (Odoo 16 and older): res has 'menus' key
         # Format B (Odoo 17/18/19): res itself contains the menu keys
         if 'menus' in res and isinstance(res['menus'], dict):

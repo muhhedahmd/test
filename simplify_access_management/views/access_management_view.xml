@@ -78,28 +78,24 @@
                                         <field name="model_id" context="{'is_access_rights': True}"
                                                options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
                                                required='1'
-                                               domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"
-                                               style="width: 20%;"/>
+                                               domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
                                         <field name="report_action_ids" widget="many2many_tags"
-                                               options="{'no_create': True}"
-                                               style="width: 12%;"/>
+                                               options="{'no_create': True}"/>
                                         <field name="server_action_ids" widget="many2many_tags"
-                                               options="{'no_create': True}"
-                                               style="width: 12%;"/>
+                                               options="{'no_create': True}"/>
                                         <field name="view_data_ids" widget="many2many_tags"
-                                               options="{'no_create': True}"
-                                               style="width: 12%;"/>
-                                        <field name="restrict_create" style="width: 5%;"/>
-                                        <field name="restrict_edit" style="width: 5%;"/>
-                                        <field name="restrict_delete" style="width: 5%;"/>
-                                        <field name="restrict_archive_unarchive" style="width: 6%;"/>
-                                        <field name="restrict_duplicate" style="width: 5%;"/>
+                                               options="{'no_create': True}"/>
+                                        <field name="restrict_create"/>
+                                        <field name="restrict_edit"/>
+                                        <field name="restrict_delete"/>
+                                        <field name="restrict_archive_unarchive"/>
+                                        <field name="restrict_duplicate"/>
                                         <!--                                        <field name="restrict_chatter" attrs="{'column_invisible' : [('parent.hide_chatter','=',True)]}"/>-->
                                         <!-- <field name="readonly" invisible="1"
                                                column_invisible="parent.readonly == True"/> -->
-                                        <field name="restrict_import" style="width: 6%;"/>
-                                        <field name="restrict_export" style="width: 6%;"/>
-                                        <field name="restrict_spreadsheet" style="width: 6%;"/>
+                                        <field name="restrict_import"/>
+                                        <field name="restrict_export"/>
+                                        <field name="restrict_spreadsheet"/>
                                     </list>
                                 </field>
                                 <p role="alert"
