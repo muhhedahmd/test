@@ -21,8 +21,9 @@ class res_users(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         res = super(res_users, self).create(vals_list)
-        for record in self:
-            for access in record.access_management_ids:    
+        # iterate over created records (res), not over self
+        for record in res:
+            for access in record.access_management_ids:
                 if self.env.company in access.company_ids and access.readonly:
                     if record.has_group('base.group_system') or record.has_group('base.group_erp_manager'):
                         raise UserError(_('Admin user can not be set as a read-only..!'))
