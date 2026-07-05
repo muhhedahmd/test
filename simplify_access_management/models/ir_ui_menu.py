@@ -1,5 +1,8 @@
 from odoo import fields, models, api, _
 from odoo.http import request
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ir_ui_menu(models.Model):
     _inherit = 'ir.ui.menu'
@@ -8,14 +11,16 @@ class ir_ui_menu(models.Model):
     def search(self, args, offset=0, limit=None, order=None):
         ids = super(ir_ui_menu, self).search(args, offset=0, limit=None, order=order)
         user = self.env.user
-        # user.clear_caches()
-        # NOTE: Odoo 19 fix — request may be None outside HTTP context (crons, shell, module loading).
-        # Wrapped in try/except to prevent AttributeError: 'NoneType' object has no attribute 'httprequest'.
         try:
             cids = request.httprequest.cookies.get('cids') and request.httprequest.cookies.get('cids').split(',')[0] or self.env.company.id
         except Exception:
             cids = self.env.company.id
-        for menu_id in user.access_management_ids.filtered(lambda line: int(cids) in line.company_ids.ids).mapped('hide_menu_ids.menu_id'):
+        
+        hide_menus = user.access_management_ids.filtered(lambda line: int(cids) in line.company_ids.ids).mapped('hide_menu_ids.menu_id')
+        _logger.info("Access Management Search Debug - user: %s (ID %s), cids: %s, rules: %s, hide_menus: %s",
+                     user.name, user.id, cids, [(r.name, r.active, r.company_ids.ids) for r in user.access_management_ids], hide_menus)
+
+        for menu_id in hide_menus:
             menu_id = self.browse(menu_id)
             if menu_id in ids:
                 ids = ids - menu_id
@@ -24,7 +29,6 @@ class ir_ui_menu(models.Model):
         if limit:
             ids = ids[:limit]
         return ids
-        # return len(ids) if count else ids
 
     @api.model
     def load_menus(self, debug=False):
@@ -41,6 +45,9 @@ class ir_ui_menu(models.Model):
         hide_menu_ids = user.access_management_ids.filtered(
             lambda line: int(cids) in line.company_ids.ids
         ).mapped('hide_menu_ids.menu_id')
+
+        _logger.info("Access Management Load Menus Debug - user: %s (ID %s), cids: %s, rules: %s, hide_menus: %s",
+                     user.name, user.id, cids, [(r.name, r.active, r.company_ids.ids) for r in user.access_management_ids], hide_menu_ids)
 
         if not hide_menu_ids:
             return res
