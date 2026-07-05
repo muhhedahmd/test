@@ -65,11 +65,20 @@ class access_management(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         self._auto_sync_menu_items()
-        return super().create(vals_list)
+        res = super().create(vals_list)
+        self.env['ir.ui.menu'].clear_caches()
+        return res
 
     def write(self, vals):
         self._auto_sync_menu_items()
-        return super().write(vals)
+        res = super().write(vals)
+        self.env['ir.ui.menu'].clear_caches()
+        return res
+
+    def unlink(self):
+        res = super().unlink()
+        self.env['ir.ui.menu'].clear_caches()
+        return res
 
     def _auto_sync_menu_items(self):
         try:
