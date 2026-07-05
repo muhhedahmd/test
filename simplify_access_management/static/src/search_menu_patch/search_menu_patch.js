@@ -16,7 +16,7 @@ patch(SearchBarMenu.prototype, {
       const res = await this.orm.call(
         "access.management",
         "is_custom_filter_and_group_available",
-        ["", this?.env?.searchModel?.resModel]
+        // ["", this?.env?.searchModel?.resModel]
       );
       this.access.removeCustomFilter = res.filter;
       this.access.removeCustomGroup = res.group;
