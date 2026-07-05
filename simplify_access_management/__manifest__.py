@@ -238,7 +238,6 @@
         'views/res_users_view.xml',
         'views/store_model_nodes_view.xml',
         'views/website_login_template.xml',
-        'views/'
     ],
     'assets': {
         'web.assets_backend': [
