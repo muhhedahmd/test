@@ -234,10 +234,10 @@
         'security/ir.model.access.csv',
         'security/res_groups.xml',
         'data/view_data.xml',
-        'access_management_view.xml',
-        'res_users_view.xml',
-        'store_model_nodes_view.xml',
-        'website_login_template.xml',
+        'views/access_management_view.xml',
+        'views/res_users_view.xml',
+        'views/store_model_nodes_view.xml',
+        'views/website_login_template.xml',
     ],
     'assets': {
         'web.assets_backend': [
