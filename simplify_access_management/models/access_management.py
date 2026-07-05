@@ -62,23 +62,7 @@ class access_management(models.Model):
                 rec.access_domain_ah_ids) + len(rec.hide_view_nodes_ids)
             rec.total_rules = rule
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        self._auto_sync_menu_items()
-        res = super().create(vals_list)
-        self.env['ir.ui.menu'].clear_caches()
-        return res
 
-    def write(self, vals):
-        self._auto_sync_menu_items()
-        res = super().write(vals)
-        self.env['ir.ui.menu'].clear_caches()
-        return res
-
-    def unlink(self):
-        res = super().unlink()
-        self.env['ir.ui.menu'].clear_caches()
-        return res
 
     def _auto_sync_menu_items(self):
         try:
@@ -115,11 +99,13 @@ class access_management(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        self._auto_sync_menu_items()
         res = super(access_management, self).create(vals_list)
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         # user.clear_caches()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
+        self.env['ir.ui.menu'].clear_caches()
         for record in res:
             if record.readonly:
                 for user in record.user_ids:
@@ -131,11 +117,13 @@ class access_management(models.Model):
         res = super(access_management, self).unlink()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
+        self.env['ir.ui.menu'].clear_caches()
         # for user in self.env['res.users'].sudo().search([('share','=',False)]):
         #     user.clear_caches()
         return res
 
     def write(self, vals):
+        self._auto_sync_menu_items()
         res = super(access_management, self).write(vals)
 
         for rec in self:
@@ -147,6 +135,7 @@ class access_management(models.Model):
         #     user.clear_caches()
         # self.clear_caches()
         self.env.registry.clear_all_caches()
+        self.env['ir.ui.menu'].clear_caches()
         return res
 
     def get_remove_options(self, model):
