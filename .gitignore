@@ -1,0 +1,10 @@
+
+*.pyc
+.idea
+
+
+.gitignore
+.git/logs
+
+
+.idea
