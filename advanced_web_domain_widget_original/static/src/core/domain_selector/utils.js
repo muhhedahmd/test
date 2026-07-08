@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Domain } from "@advanced_web_domain_widget/core/domain";
+import { Domain } from "@advanced_web_domain_widget_original/core/domain";
 import { getDefaultValue, getDefaultOperator } from "./domain_selector_fields";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
@@ -12,14 +12,14 @@ import {
     toTree,
     normalizeValue,
     formatValue as toSring,
-} from "@advanced_web_domain_widget/core/domain_tree";
+} from "@advanced_web_domain_widget_original/core/domain_tree";
 import { useLoadFieldInfo, useLoadPathDescription } from "@web/core/model_field_selector/utils";
-import { getOperatorInfo } from "@advanced_web_domain_widget/core/domain_selector/domain_selector_operators";
+import { getOperatorInfo } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_operators";
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Tree} tree
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Tree} tree
  * @param {Function} getFieldDef
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Tree}
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Tree}
  */
 export function createVirtualOperators(tree, getFieldDef) {
     if (tree.type === "condition") {
@@ -39,8 +39,8 @@ export function createVirtualOperators(tree, getFieldDef) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Tree} tree
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Tree}
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Tree} tree
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Tree}
  */
 function removeVirtualOperators(tree) {
     if (tree.type === "condition") {
@@ -58,7 +58,7 @@ function removeVirtualOperators(tree) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Tree} domainSelectorTree
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Tree} domainSelectorTree
  * @returns {string}
  */
 export function buildDomain(domainSelectorTree) {
@@ -67,10 +67,10 @@ export function buildDomain(domainSelectorTree) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain").DomainRepr} domain
+ * @param {import("@advanced_web_domain_widget_original/core/domain").DomainRepr} domain
  * @param {Function} getFieldDef
  * @param {Object} [options={}]
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Tree}
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Tree}
  */
 export function buildDomainSelectorTree(domain, getFieldDef, options = {}) {
     const tree = toTree(domain, options);
@@ -78,8 +78,8 @@ export function buildDomainSelectorTree(domain, getFieldDef, options = {}) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Value} value
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Value}
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Value} value
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Value}
  */
 function cloneValue(value) {
     if (value instanceof Expression) {
@@ -92,8 +92,8 @@ function cloneValue(value) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Tree} tree
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Tree}
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Tree} tree
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Tree}
  */
 export function cloneTree(tree) {
     const clone = {};
@@ -104,8 +104,8 @@ export function cloneTree(tree) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain").DomainRepr} domain
- * @returns {import("@advanced_web_domain_widget/core/domain_tree").Value[]}
+ * @param {import("@advanced_web_domain_widget_original/core/domain").DomainRepr} domain
+ * @returns {import("@advanced_web_domain_widget_original/core/domain_tree").Value[]}
  */
 export function extractPathsFromDomain(domain) {
     domain = new Domain(domain);
@@ -123,7 +123,7 @@ function isId(val) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain").DomainRepr} domain
+ * @param {import("@advanced_web_domain_widget_original/core/domain").DomainRepr} domain
  * @param {Function} getFieldDef
  * @returns {Object}
  */
@@ -168,7 +168,7 @@ export function useLoadDisplayNames(nameService) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Value} val
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Value} val
  * @param {boolean} disambiguate
  * @param {Object|null} fieldDef
  * @param {Object} displayNames

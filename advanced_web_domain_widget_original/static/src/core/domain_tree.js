@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Domain } from "@advanced_web_domain_widget/core/domain";
+import { Domain } from "@advanced_web_domain_widget_original/core/domain";
 import { formatAST, toPyValue } from "@web/core/py_js/py_utils";
 
 const TERM_OPERATORS_NEGATION = {
@@ -78,7 +78,7 @@ export function toAST(value) {
 }
 
 /** @typedef { import("@web/core/py_js/py_parser").AST } AST */
-/** @typedef {import("@advanced_web_domain_widget/core/domain").DomainRepr} DomainRepr */
+/** @typedef {import("@advanced_web_domain_widget_original/core/domain").DomainRepr} DomainRepr */
 
 /**
  * @typedef {number|string|boolean|Expression} Atom

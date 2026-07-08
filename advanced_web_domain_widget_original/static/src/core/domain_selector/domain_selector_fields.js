@@ -1,8 +1,8 @@
 /** @odoo-module **/
 
 import { Component } from "@odoo/owl";
-import { selectOperators } from "@advanced_web_domain_widget/core/domain_selector/domain_selector_operators";
-import { DateSelectionBits } from "@advanced_web_domain_widget/dateSelectionBits/dateSelectionBits";
+import { selectOperators } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_operators";
+import { DateSelectionBits } from "@advanced_web_domain_widget_original/dateSelectionBits/dateSelectionBits";
 import {
   deserializeDate,
   deserializeDateTime,
@@ -19,7 +19,7 @@ import { ModelFieldSelector } from "@web/core/model_field_selector/model_field_s
 import {
   Expression,
   formatValue,
-} from "@advanced_web_domain_widget/core/domain_tree";
+} from "@advanced_web_domain_widget_original/core/domain_tree";
 import {
   DomainSelectorAutocomplete,
   DomainSelectorSingleAutocomplete,

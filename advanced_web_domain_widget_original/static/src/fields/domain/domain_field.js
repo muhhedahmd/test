@@ -5,19 +5,20 @@ import { Component, onWillStart, onWillUpdateProps, useState } from "@odoo/owl";
 import {
   Domain,
   InvalidDomainError,
-} from "@advanced_web_domain_widget/core/domain";
-import { DomainSelector } from "@advanced_web_domain_widget/core/domain_selector/domain_selector";
-import { DomainSelectorDialog } from "@advanced_web_domain_widget/core/domain_selector_dialog/domain_selector_dialog";
+} from "@advanced_web_domain_widget_original/core/domain";
+import { DomainSelector } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector";
+import { DomainSelectorDialog } from "@advanced_web_domain_widget_original/core/domain_selector_dialog/domain_selector_dialog";
 import { EvaluationError } from "@web/core/py_js/py_interpreter";
 import { registry } from "@web/core/registry";
 import { SelectCreateDialog } from "@web/views/view_dialogs/select_create_dialog";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import { useBus, useService, useOwnedDialogs } from "@web/core/utils/hooks";
-import { toTree } from "@advanced_web_domain_widget/core/domain_tree";
+import { useBus, useService } from "@web/core/utils/hooks";
+import { rpc } from "@web/core/network/rpc";
+import { toTree } from "@advanced_web_domain_widget_original/core/domain_tree";
 import {
   useGetDomainTreeDescription,
   useGetDefaultLeafDomain,
-} from "@advanced_web_domain_widget/core/domain_selector/utils";
+} from "@advanced_web_domain_widget_original/core/domain_selector/utils";
 
 function calculateDate(domain) {
   if (Array.isArray(domain)) {
@@ -217,11 +218,10 @@ export class DomainFieldBits extends Component {
   };
 
   setup() {
-    this.rpc = useService("rpc");
     this.orm = useService("orm");
     this.getDomainTreeDescription = useGetDomainTreeDescription();
     this.getDefaultLeafDomain = useGetDefaultLeafDomain();
-    this.addDialog = useOwnedDialogs();
+    this.dialogService = useService("dialog");
 
     this.state = useState({
       isValid: null,
@@ -408,7 +408,7 @@ export class DomainFieldBits extends Component {
               newDomain.push(ele);
           }
       });
-    this.addDialog(
+    this.dialogService.add(
       SelectCreateDialog,
       {
         title: _t("Selected records"),
@@ -428,7 +428,7 @@ export class DomainFieldBits extends Component {
 
   onEditDialogBtnClick() {
     // resModel is assumed to be valid here
-    this.addDialog(DomainSelectorDialog, {
+    this.dialogService.add(DomainSelectorDialog, {
       resModel: this.getResModel(),
       domain: this.getDomain(),
       isDebugMode: !!this.env.debug,
@@ -456,7 +456,7 @@ export class DomainFieldBits extends Component {
               newDomain.push(ele);
           }
       });
-    return this.rpc("/web/domain/validate", { model: resModel, newDomain });
+    return rpc("/web/domain/validate", { model: resModel, newDomain });
   }
 
   update(domain, isDebugEdited = false) {

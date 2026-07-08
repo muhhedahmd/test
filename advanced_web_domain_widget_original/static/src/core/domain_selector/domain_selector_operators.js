@@ -1,13 +1,13 @@
 /** @odoo-module **/
 
 import { _t } from "@web/core/l10n/translation";
-import { formatValue, toValue } from "@advanced_web_domain_widget/core/domain_tree";
+import { formatValue, toValue } from "@advanced_web_domain_widget_original/core/domain_tree";
 import { sprintf } from "@web/core/utils/strings";
 import { parseExpr } from "@web/core/py_js/py";
 
 /**
  * @typedef {Object} OperatorInfo
- * @property {import("@advanced_web_domain_widget/core/domain_tree").Value} operator
+ * @property {import("@advanced_web_domain_widget_original/core/domain_tree").Value} operator
  * @property {string} label
  * @property {number|"variable"} valueCount
  */
@@ -60,7 +60,7 @@ export function toOperator(key) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Value} operator
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Value} operator
  * @param {boolean} [negate=false]
  * @returns {OperatorInfo}
  */
@@ -92,7 +92,7 @@ export function getOperatorInfo(operator, negate = false) {
 }
 
 /**
- * @param {import("@advanced_web_domain_widget/core/domain_tree").Value[]} operators
+ * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Value[]} operators
  * @returns {(OperatorInfo)[]}
  */
 export function selectOperators(operators) {

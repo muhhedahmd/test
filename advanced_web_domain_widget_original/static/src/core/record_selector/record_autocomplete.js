@@ -5,7 +5,7 @@ import { AutoComplete } from "@web/core/autocomplete/autocomplete";
 import { _t } from "@web/core/l10n/translation";
 import { Domain } from "@web/core/domain";
 import { registry } from "@web/core/registry";
-import { useOwnedDialogs, useService } from "@web/core/utils/hooks";
+import { useService } from "@web/core/utils/hooks";
 
 const SEARCH_LIMIT = 7;
 const SEARCH_MORE_LIMIT = 320;
@@ -29,7 +29,7 @@ export class RecordAutocomplete extends Component {
     setup() {
         this.orm = useService("orm");
         this.nameService = useService("name");
-        this.addDialog = useOwnedDialogs();
+        this.dialogService = useService("dialog");
         this.sources = [
             {
                 placeholder: _t("Loading..."),
@@ -102,7 +102,7 @@ export class RecordAutocomplete extends Component {
             : undefined;
         // fine for now but we don't like this kind of dependence of core to views
         const SelectCreateDialog = registry.category("dialogs").get("select_create");
-        this.addDialog(SelectCreateDialog, {
+        this.dialogService.add(SelectCreateDialog, {
             title: _t("Search: %s", fieldString),
             dynamicFilters,
             resModel,

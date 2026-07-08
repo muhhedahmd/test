@@ -9,16 +9,16 @@ import {
   leafToString,
   useGetDefaultLeafDomain,
   useLoadDisplayNames,
-} from "@advanced_web_domain_widget/core/domain_selector/utils";
+} from "@advanced_web_domain_widget_original/core/domain_selector/utils";
 import { Component, onWillStart, onWillUpdateProps } from "@odoo/owl";
-import { Domain } from "@advanced_web_domain_widget/core/domain";
+import { Domain } from "@advanced_web_domain_widget_original/core/domain";
 import { CheckBox } from "@web/core/checkbox/checkbox";
 import { Dropdown } from "@web/core/dropdown/dropdown";
 import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 import {
   getOperatorInfo,
   toOperator,
-} from "@advanced_web_domain_widget/core/domain_selector/domain_selector_operators";
+} from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_operators";
 import {
   Editor,
   PathEditor,
@@ -26,10 +26,10 @@ import {
   getDefaultValue,
   getOperatorsInfo,
   getEditorInfo,
-} from "@advanced_web_domain_widget/core/domain_selector/domain_selector_fields";
+} from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_fields";
 import { ModelFieldSelector } from "@web/core/model_field_selector/model_field_selector";
 import { useLoadFieldInfo } from "@web/core/model_field_selector/utils";
-import { formatValue } from "@advanced_web_domain_widget/core/domain_tree";
+import { formatValue } from "@advanced_web_domain_widget_original/core/domain_tree";
 import { deepEqual } from "@web/core/utils/objects";
 import { useService } from "@web/core/utils/hooks";
 

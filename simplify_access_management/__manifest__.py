@@ -254,8 +254,7 @@
     # COMMENTED OUT DEPENDENCY: 'advanced_web_domain_widget' was commented out here to avoid Odoo.sh installation failure.
     # Since 'advanced_web_domain_widget' is a commercial module and not loaded in Odoo.sh addons path, 
     # we commented it out and bundled its widget helper logic directly in 'simplify_access_management'.
-    # 'depends': ['web', 'advanced_web_domain_widget'],
-    'depends': ['web'],
+    'depends': ['web', 'advanced_web_domain_widget_original'],
     'post_init_hook': 'post_install_action_dup_hook',
     'application': True,
     'installable': True,

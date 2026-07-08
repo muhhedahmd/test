@@ -2,7 +2,7 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError, AccessError
 from odoo.osv import expression
 from odoo.tools.safe_eval import safe_eval
-from odoo.addons.advanced_web_domain_widget.models.domain_prepare import prepare_domain_v2
+from odoo.addons.advanced_web_domain_widget_original.models.domain_prepare import prepare_domain_v2
 
 
 class BaseModel(models.AbstractModel):
