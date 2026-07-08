@@ -8,7 +8,7 @@ from odoo import http
 
 class Action(Action):
     
-    @http.route('/web/action/run', type='json', auth="user")
+    @http.route('/web/action/run', type='jsonrpc', auth="user")
     def run(self, action_id, context=None):
         res = super(Action,self).run(action_id, context)
         actions_and_prints = []
@@ -22,7 +22,7 @@ class Action(Action):
                             res['views'].pop(res['views'].index(b_view))
         return res
     
-    @http.route('/web/action/load', type='json', auth="user")
+    @http.route('/web/action/load', type='jsonrpc', auth="user")
     def load(self, action_id, additional_context=None):
         res = super(Action,self).load(action_id, additional_context=additional_context)
         if res:
