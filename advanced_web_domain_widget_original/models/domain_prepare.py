@@ -1,8 +1,17 @@
 from odoo.http import request
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 def prepare_domain_v2(domain):
+    _logger.info("Advanced Web Domain Widget (Original) - prepare_domain_v2 called with: %s", domain)
+    res = _prepare_domain_v2(domain)
+    _logger.info("Advanced Web Domain Widget (Original) - prepare_domain_v2 translated to: %s", res)
+    return res
+
+def _prepare_domain_v2(domain):
     if isinstance(domain, tuple) or isinstance(domain, list):
         field_name = domain[0]
         operator = domain[1]
