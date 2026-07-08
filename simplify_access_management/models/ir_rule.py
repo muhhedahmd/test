@@ -3,7 +3,7 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import  ValidationError, UserError
 from odoo.tools import config
-from odoo.osv import expression
+from odoo.osv.expression import normalize_domain
 from odoo.tools.safe_eval import safe_eval
 from odoo.http import request
 from datetime import datetime,timedelta
@@ -115,7 +115,7 @@ class ir_rule(models.Model):
                         for access in access_domain_ah_ids.sudo():
                             dom = safe_eval(access.domain, eval_context) if access.domain else []
                             if dom:
-                                dom = expression.normalize_domain(dom)
+                                dom = normalize_domain(dom)
                                 for dom_tuple in dom:
                                     if isinstance(dom_tuple, tuple):
                                         left_value = dom_tuple[0]

@@ -241,7 +241,6 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'simplify_access_management/static/src/js/terabits_domain.js',
             'simplify_access_management/static/src/js/action_menus.js',
             'simplify_access_management/static/src/js/hide_chatter.js',
             'simplify_access_management/static/src/js/cog_menu.js',
