@@ -28,12 +28,13 @@ import {
   getEditorInfo,
 } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_fields";
 import { ModelFieldSelector } from "@web/core/model_field_selector/model_field_selector";
-function useLoadFieldInfo(fieldService) {
-  return (resModel, path) => fieldService.loadFieldInfo(resModel, path);
-}
 import { formatValue } from "@advanced_web_domain_widget_original/core/domain_tree";
 import { deepEqual } from "@web/core/utils/objects";
 import { useService } from "@web/core/utils/hooks";
+
+function useLoadFieldInfo(fieldService) {
+  return (resModel, path) => fieldService.loadFieldInfo(resModel, path);
+}
 
 function collectDifferences(tree, otherTree) {
   // some differences shadow the other differences "below":

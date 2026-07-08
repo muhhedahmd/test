@@ -13,13 +13,14 @@ import {
     normalizeValue,
     formatValue as toSring,
 } from "@advanced_web_domain_widget_original/core/domain_tree";
+import { getOperatorInfo } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_operators";
+
 function useLoadFieldInfo(fieldService) {
     return (resModel, path) => fieldService.loadFieldInfo(resModel, path);
 }
 function useLoadPathDescription(fieldService) {
     return (resModel, path) => fieldService.loadPathDescription(resModel, path);
 }
-import { getOperatorInfo } from "@advanced_web_domain_widget_original/core/domain_selector/domain_selector_operators";
 
 /**
  * @param {import("@advanced_web_domain_widget_original/core/domain_tree").Tree} tree
