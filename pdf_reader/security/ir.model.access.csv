@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pdf_reader,pdf.reader,model_pdf_reader,base.group_user,1,1,1,1
+access_pdf_reader_line,pdf.reader.line,model_pdf_reader_line,base.group_user,1,1,1,1

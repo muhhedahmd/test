@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_pdf_reader_form" model="ir.ui.view">
+        <field name="name">pdf.reader.form</field>
+        <field name="model">pdf.reader</field>
+        <field name="arch" type="xml">
+            <form string="PDF Reader">
+                <header>
+                    <button name="action_read_pdf" string="1. Extract Data" type="object" class="oe_highlight"
+                            help="If multiple files are uploaded, a separate document is created and extracted for each file."/>
+                    <button name="action_create_invoice" string="2. Create Draft Invoice" type="object" class="btn-success" invisible="document_type != 'invoice'"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning text-center" role="alert" invisible="not warning_message">
+                        <field name="warning_message" nolabel="1"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="document_type"/>
+                            <field name="attachment_ids" widget="many2many_binary" string="Upload Files"
+                                   help="Upload one or more PDF/image files. If you upload several files, each one is treated as a SEPARATE invoice: a separate record will be created and extracted for every file."/>
+                        </group>
+                        <group string="Extracted Preview">
+                            <field name="partner_name"/>
+                            <field name="partner_id"/>
+                            <field name="invoice_date"/>
+                            <field name="invoice_ref"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="prompt"/>
+                    </group>
+                    <notebook>
+                        <page string="Extracted Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="col1" string="Description"/>
+                                    <field name="product_id"/>
+                                    <field name="col2" string="Quantity"/>
+                                    <field name="col3" string="Price"/>
+                                    <field name="col6" string="Discount"/>
+                                    <field name="col7" string="Tax %"/>
+                                    <field name="col4" string="Tax Amt"/>
+                                    <field name="col5" string="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Raw AI Result">
+                            <field name="result" nolabel="1" placeholder="Raw AI JSON will appear here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_pdf_reader_tree" model="ir.ui.view">
+        <field name="name">pdf.reader.tree</field>
+        <field name="model">pdf.reader</field>
+        <field name="arch" type="xml">
+            <list string="PDF Readers">
+                <field name="invoice_ref" string="Reference"/>
+                <field name="partner_name"/>
+                <field name="invoice_date"/>
+                <field name="document_type"/>
+                <field name="amount_total" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_pdf_reader" model="ir.actions.act_window">
+        <field name="name">PDF Reader</field>
+        <field name="res_model">pdf.reader</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_pdf_reader_root" name="PDF Reader" sequence="10"/>
+    <menuitem id="menu_pdf_reader_action" name="Upload Invoices" parent="menu_pdf_reader_root" action="action_pdf_reader" sequence="10"/>
+
+</odoo>
